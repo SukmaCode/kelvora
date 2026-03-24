@@ -1,0 +1,33 @@
+# Environment
+.env
+.env.*
+
+# Dependency
+/vendor/
+/node_modules/
+
+# Logs
+*.log
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.idea/
+.vscode/
+
+# Build
+dist/
+build/
+
+# Runtime
+storage/
+tmp/
+uploads/
+
+# Secrets
+*.key
+*.pem
+*.crt
