@@ -16,7 +16,7 @@ use PDO;
  *       protected array $fillable = ['business_name', 'email', ...];
  *   }
  */
-class BaseModel
+class BaseModel 
 {
     protected Database $db;
     protected string $table = '';

@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS users (
     email VARCHAR(150) UNIQUE NOT NULL,
     phone VARCHAR(30),
     password_hash TEXT NOT NULL,
-    role VARCHAR(30) DEFAULT 'owner',
+    role ENUM('admin', 'owner') DEFAULT 'owner',
     active_subscription_id INT,
     status VARCHAR(20) DEFAULT 'active',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -208,6 +208,51 @@ CREATE TABLE IF NOT EXISTS payments (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- =========================
+-- 14. INCOMES (PEMASUKAN)
+-- =========================
+CREATE TABLE IF NOT EXISTS incomes (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    category VARCHAR(50) NOT NULL DEFAULT 'sales',
+    description VARCHAR(255) NOT NULL,
+    amount DECIMAL(14,2) NOT NULL,
+    income_date DATE NOT NULL,
+    reference_id INT NULL COMMENT 'Optional link to orders.id',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- =========================
+-- 15. EXPENSES (PENGELUARAN)
+-- =========================
+CREATE TABLE IF NOT EXISTS expenses (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    category VARCHAR(50) NOT NULL DEFAULT 'operational',
+    description VARCHAR(255) NOT NULL,
+    amount DECIMAL(14,2) NOT NULL,
+    expense_date DATE NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- =========================
+-- 16. PROFIT LOSS REPORTS
+-- =========================
+CREATE TABLE IF NOT EXISTS profit_loss_reports (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    period_month TINYINT NOT NULL,
+    period_year SMALLINT NOT NULL,
+    total_income DECIMAL(14,2) DEFAULT 0,
+    total_expense DECIMAL(14,2) DEFAULT 0,
+    net_profit DECIMAL(14,2) DEFAULT 0,
+    generated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(user_id, period_month, period_year),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- =========================
 -- INDEXES (PERFORMANCE)
 -- =========================
 CREATE INDEX idx_users_email ON users(email);
@@ -216,11 +261,17 @@ CREATE INDEX idx_orders_customer ON orders(customer_id);
 CREATE INDEX idx_products_user ON products(user_id);
 CREATE INDEX idx_messages_user ON messages(user_id);
 CREATE INDEX idx_subscriptions_user ON subscriptions(user_id);
+CREATE INDEX idx_incomes_user ON incomes(user_id);
+CREATE INDEX idx_incomes_date ON incomes(income_date);
+CREATE INDEX idx_expenses_user ON expenses(user_id);
+CREATE INDEX idx_expenses_date ON expenses(expense_date);
+CREATE INDEX idx_profit_loss_user ON profit_loss_reports(user_id);
 
 -- =========================
 -- SAMPLE DATA (optional)
 -- =========================
 INSERT INTO users (business_name, owner_name, email, phone, password_hash, role, status) VALUES
+('Kelvora Admin', 'Super Admin', 'admin@kelvora.com', '08111111111', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'admin', 'active'),
 ('Toko Makmur', 'Budi Santoso', 'budi@example.com', '081234567890', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'owner', 'active'),
 ('Warung Sejahtera', 'Siti Aminah', 'siti@example.com', '081298765432', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'owner', 'active');
 
@@ -237,3 +288,35 @@ INSERT INTO products (user_id, name, description, price, stock, category, status
 (1, 'Topi Snapback', 'Topi snapback logo custom', 75000.00, 200, 'Accessories', 'active'),
 (2, 'Nasi Goreng Spesial', 'Nasi goreng dengan telur dan ayam', 25000.00, 0, 'Food', 'active'),
 (2, 'Es Teh Manis', 'Es teh manis segar', 5000.00, 0, 'Beverage', 'active');
+
+-- Sample Incomes
+INSERT INTO incomes (user_id, category, description, amount, income_date) VALUES
+(1, 'sales', 'Penjualan Kaos Polos Hitam (10 pcs)', 850000.00, '2026-03-01'),
+(1, 'sales', 'Penjualan Hoodie Premium (5 pcs)', 1250000.00, '2026-03-05'),
+(1, 'sales', 'Penjualan Topi Snapback (8 pcs)', 600000.00, '2026-03-10'),
+(1, 'service', 'Jasa Custom Design', 500000.00, '2026-03-12'),
+(1, 'other', 'Pendapatan Bunga Bank', 75000.00, '2026-03-15'),
+(1, 'sales', 'Penjualan Kaos Polos Hitam (20 pcs)', 1700000.00, '2026-03-18'),
+(1, 'sales', 'Penjualan Hoodie Premium (3 pcs)', 750000.00, '2026-03-22'),
+(1, 'sales', 'Penjualan Paket Bundle', 450000.00, '2026-02-05'),
+(1, 'service', 'Jasa Sablon Kaos', 300000.00, '2026-02-10'),
+(1, 'other', 'Pendapatan Lain-lain', 150000.00, '2026-02-20'),
+(2, 'sales', 'Penjualan Nasi Goreng (50 porsi)', 1250000.00, '2026-03-01'),
+(2, 'sales', 'Penjualan Es Teh Manis (100 gelas)', 500000.00, '2026-03-05'),
+(2, 'other', 'Pendapatan Catering', 2000000.00, '2026-03-15');
+
+-- Sample Expenses
+INSERT INTO expenses (user_id, category, description, amount, expense_date) VALUES
+(1, 'purchase', 'Beli Bahan Kaos Cotton Combed 30s', 1500000.00, '2026-03-02'),
+(1, 'operational', 'Biaya Listrik & Air', 350000.00, '2026-03-03'),
+(1, 'salary', 'Gaji Karyawan (2 orang)', 4000000.00, '2026-03-05'),
+(1, 'operational', 'Biaya Internet & Hosting', 250000.00, '2026-03-06'),
+(1, 'purchase', 'Beli Bahan Hoodie Fleece', 800000.00, '2026-03-08'),
+(1, 'operational', 'Biaya Pengiriman/Ekspedisi', 200000.00, '2026-03-12'),
+(1, 'other', 'Biaya Maintenance Mesin', 500000.00, '2026-03-15'),
+(1, 'purchase', 'Beli Bahan Topi', 400000.00, '2026-02-03'),
+(1, 'operational', 'Biaya Sewa Tempat', 1500000.00, '2026-02-05'),
+(1, 'salary', 'Gaji Karyawan (2 orang)', 4000000.00, '2026-02-05'),
+(2, 'purchase', 'Beli Bahan Masakan', 800000.00, '2026-03-01'),
+(2, 'salary', 'Gaji Karyawan (3 orang)', 4500000.00, '2026-03-05'),
+(2, 'operational', 'Biaya Gas & Listrik', 450000.00, '2026-03-10');

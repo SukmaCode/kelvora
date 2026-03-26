@@ -17,6 +17,8 @@ class UserController extends BaseController
 
     public function __construct()
     {
+        // Must be admin to access users
+        $this->requireRole('admin');
         $this->userModel = new User();
     }
 
@@ -26,7 +28,7 @@ class UserController extends BaseController
      */
     public function index(): void
     {
-        $users = $this->userModel->findAll();
+        $users = $this->userModel->findAll('id', 'ASC');
 
         $this->view('users.index', [
             'title' => 'Users',

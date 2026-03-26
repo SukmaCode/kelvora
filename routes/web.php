@@ -12,6 +12,19 @@
 /** @var \Core\Router $router */
 
 // =========================================================================
+// Landing Page (public, no sidebar layout)
+// =========================================================================
+$router->get('landing',  'LandingController@index');
+
+// =========================================================================
+// Authentication
+// =========================================================================
+$router->get('login',    'AuthController@loginForm');
+$router->post('login',   'AuthController@login');
+$router->post('logout',  'AuthController@logout');
+$router->get('logout',   'AuthController@logout'); // Allow GET for simple usage if needed
+
+// =========================================================================
 // Home / Dashboard
 // =========================================================================
 $router->get('',  'HomeController@index');
@@ -46,3 +59,17 @@ $router->get('orders/create',      'OrderController@create');
 $router->post('orders/store',      'OrderController@store');
 $router->get('orders/{id}',        'OrderController@show');
 $router->post('orders/{id}/delete', 'OrderController@delete');
+
+// =========================================================================
+// Income Statements (Dashboard + Export)
+// =========================================================================
+$router->get('income-statements',              'IncomeStatementController@index');
+$router->get('income-statements/export-excel', 'IncomeStatementController@exportExcel');
+$router->get('income-statements/export-pdf',   'IncomeStatementController@exportPdf');
+
+// =========================================================================
+// Legal Pages (Public)
+// =========================================================================
+$router->get('policy-privacy',   'LegalController@policyPrivacy');
+$router->get('remove-data',      'LegalController@removeData');
+$router->get('terms-conditions', 'LegalController@termsConditions');

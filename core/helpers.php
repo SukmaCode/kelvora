@@ -66,7 +66,14 @@ function flash_message(): string
     $type = e($flash['type']);
     $message = e($flash['message']);
 
-    return '<div class="alert alert-' . $type . '">' . $message . '</div>';
+    $colorClasses = match($type) {
+        'success' => 'bg-green-500/10 border-green-500/25 text-green-400',
+        'danger'  => 'bg-red-500/10 border-red-500/25 text-red-400',
+        'warning' => 'bg-amber-500/10 border-amber-500/25 text-amber-400',
+        default   => 'bg-cyan-500/10 border-cyan-500/25 text-cyan-400',
+    };
+
+    return '<div class="mx-4 sm:mx-6 md:mx-8 px-4 sm:px-5 py-3.5 rounded-md mb-4 text-sm border animate-[fadeIn_0.3s_ease] ' . $colorClasses . '">' . $message . '</div>';
 }
 
 // -------------------------------------------------------------------------

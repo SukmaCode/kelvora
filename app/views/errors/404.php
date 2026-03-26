@@ -4,39 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>404 - Page Not Found</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Inter', sans-serif;
-            background: #0f172a;
-            color: #e2e8f0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            text-align: center;
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+                    },
+                },
+            },
         }
-        .error-page h1 { font-size: 6rem; font-weight: 700; color: #6366f1; }
-        .error-page p { font-size: 1.2rem; margin: 1rem 0 2rem; color: #94a3b8; }
-        .error-page a {
-            display: inline-block;
-            padding: 0.75rem 2rem;
-            background: #6366f1;
-            color: #fff;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 500;
-            transition: background 0.2s;
-        }
-        .error-page a:hover { background: #4f46e5; }
-    </style>
+    </script>
 </head>
-<body>
-    <div class="error-page">
-        <h1>404</h1>
-        <p>The page you're looking for doesn't exist.</p>
-        <a href="<?= defined('BASE_URL') ? BASE_URL : '/' ?>">Back to Dashboard</a>
+<body class="font-sans bg-[#0f172a] text-slate-200 flex items-center justify-center min-h-screen text-center px-4">
+    <div>
+        <h1 class="text-6xl sm:text-7xl md:text-8xl font-bold text-indigo-500">404</h1>
+        <p class="text-base sm:text-lg md:text-xl mt-3 sm:mt-4 mb-6 sm:mb-8 text-slate-400">The page you're looking for doesn't exist.</p>
+        <a href="<?= defined('BASE_URL') ? BASE_URL : '/' ?>" class="inline-block px-6 sm:px-8 py-3 bg-indigo-500 text-white rounded-lg no-underline font-medium transition-colors duration-200 hover:bg-indigo-600 text-sm sm:text-base">Back to Dashboard</a>
     </div>
 </body>
 </html>

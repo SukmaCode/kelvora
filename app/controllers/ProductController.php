@@ -15,11 +15,14 @@ use App\Models\Product;
 class ProductController extends BaseController
 {
     private Product $productModel;
-    private int $currentUserId = 1; // Demo: hardcoded user_id
+    private int $currentUserId;
 
     public function __construct()
     {
+        // Must be owner to manage products
+        $this->requireRole('owner');
         $this->productModel = new Product();
+        $this->currentUserId = $_SESSION['user_id'] ?? 1;
     }
 
     /**

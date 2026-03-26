@@ -39,7 +39,7 @@ class BaseController
         $content = ob_get_clean();
 
         // Render inside layout
-        require BASE_PATH . '/app/views/layouts/main.php';
+        require BASE_PATH . '/app/views/layouts/sidebar.php';
     }
 
     /**
@@ -115,5 +115,29 @@ class BaseController
     protected function input(string $key, $default = null)
     {
         return $_POST[$key] ?? $default;
+    }
+
+    /**
+     * Require the user to be authenticated.
+     */
+    protected function requireAuth(): void
+    {
+        if (empty($_SESSION['user_id'])) {
+            $this->setFlash('danger', 'Please login to continue.');
+            $this->redirect('login');
+        }
+    }
+
+    /**
+     * Require the user to have a specific role.
+     */
+    protected function requireRole(string $role): void
+    {
+        $this->requireAuth();
+        
+        if (($_SESSION['user_role'] ?? '') !== $role) {
+            http_response_code(403);
+            die('Unauthorized access. You do not have the required role.');
+        }
     }
 }

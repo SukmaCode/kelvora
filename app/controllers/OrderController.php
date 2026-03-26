@@ -21,14 +21,16 @@ class OrderController extends BaseController
     private OrderItem $orderItemModel;
     private Customer $customerModel;
     private Product $productModel;
-    private int $currentUserId = 1; // Demo: hardcoded user_id
+    private int $currentUserId;
 
     public function __construct()
     {
+        $this->requireRole('owner');
         $this->orderModel     = new Order();
         $this->orderItemModel = new OrderItem();
         $this->customerModel  = new Customer();
         $this->productModel   = new Product();
+        $this->currentUserId  = $_SESSION['user_id'] ?? 1;
     }
 
     /**

@@ -13,8 +13,16 @@ class HomeController extends BaseController
 {
     public function index(): void
     {
-        $this->view('home.index', [
-            'title' => 'Dashboard',
-        ]);
+        $this->requireAuth();
+
+        if ($_SESSION['user_role'] === 'admin') {
+            $this->view('admin.index', [
+                'title' => 'Admin Dashboard',
+            ]);
+        } else {
+            $this->view('owner.index', [
+                'title' => 'Dashboard',
+            ]);
+        }
     }
 }
