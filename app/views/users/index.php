@@ -25,14 +25,22 @@
                         <td colspan="9" class="text-center text-slate-500 px-4 py-6 text-sm border-b border-border">No users found.</td>
                     </tr>
                 <?php else: ?>
+                    <?php $num = 1; ?>
                     <?php foreach ($users as $user): ?>
                         <tr class="hover:bg-indigo-500/[0.04] [&:last-child>td]:border-b-0">
-                            <td class="px-2 py-4 text-sm border-b border-border align-middle"><?= e($user->id) ?></td>
+                            <td class="px-2 py-4 text-sm border-b border-border align-middle"><?= ($num++) ?></td>
                             <td class="px-2 py-4 text-sm border-b border-border align-middle"><strong><?= e($user->business_name) ?></strong></td>
                             <td class="px-2 py-4 text-sm border-b border-border align-middle"><?= e($user->owner_name) ?></td>
                             <td class="px-2 py-4 text-sm border-b border-border align-middle"><?= e($user->email) ?></td>
                             <td class="px-2 py-4 text-sm border-b border-border align-middle"><?= e($user->phone) ?></td>
-                            <td class="px-2 py-4 text-sm border-b border-border align-middle"><span class="inline-block px-2.5 py-0.5 text-xs font-semibold rounded-full capitalize tracking-tight bg-cyan-500/15 text-cyan-400"><?= e($user->role) ?></span></td>
+                            <td class="px-2 py-4 text-sm border-b border-border align-middle">
+                                <span class="inline-block px-2.5 py-0.5 text-xs font-semibold rounded-full capitalize tracking-tight 
+                                    <?= $user->role === 'admin' 
+                                        ? 'bg-purple-500/15 text-purple-400' 
+                                        : 'bg-cyan-500/15 text-cyan-400' ?>">
+                                    <?= e($user->role) ?>
+                                </span>
+                            </td>
                             <td class="px-2 py-4 text-sm border-b border-border align-middle">
                                 <span class="inline-block px-2.5 py-0.5 text-xs font-semibold rounded-full capitalize tracking-tight <?= $user->status === 'active' ? 'bg-green-500/15 text-green-400' : 'bg-red-500/15 text-red-400' ?>">
                                     <?= e($user->status) ?>

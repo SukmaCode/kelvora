@@ -70,6 +70,7 @@ class UserController extends BaseController
         if (empty($data['business_name'])) $errors[] = 'Business name is required.';
         if (empty($data['owner_name']))    $errors[] = 'Owner name is required.';
         if (empty($data['email']))         $errors[] = 'Email is required.';
+        if (empty($data['phone']))         $errors[] = 'Phone number is required.';
         if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) $errors[] = 'Invalid email format.';
         if (empty($password) || strlen($password) < 6) $errors[] = 'Password must be at least 6 characters.';
 

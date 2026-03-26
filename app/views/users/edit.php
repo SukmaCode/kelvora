@@ -12,28 +12,28 @@
                 <div class="flex flex-col gap-1.5">
                     <label for="business_name" class="text-sm font-medium text-slate-400">Business Name <span class="text-red-400">*</span></label>
                     <input type="text" id="business_name" name="business_name" 
-                           value="<?= e(old('business_name', $user->business_name)) ?>" 
+                           value="<?= old('business_name', $user->business_name) ?>" 
                            class="w-full px-3 sm:px-3.5 py-2.5 text-sm font-sans text-slate-200 bg-input border border-border rounded-md outline-none transition-all duration-200 focus:border-accent focus:shadow-[0_0_0_3px_rgba(99,102,241,0.15)] placeholder:text-slate-500" required>
                 </div>
 
                 <div class="flex flex-col gap-1.5">
                     <label for="owner_name" class="text-sm font-medium text-slate-400">Owner Name <span class="text-red-400">*</span></label>
                     <input type="text" id="owner_name" name="owner_name" 
-                           value="<?= e(old('owner_name', $user->owner_name)) ?>" 
+                           value="<?= old('owner_name', $user->owner_name) ?>" 
                            class="w-full px-3 sm:px-3.5 py-2.5 text-sm font-sans text-slate-200 bg-input border border-border rounded-md outline-none transition-all duration-200 focus:border-accent focus:shadow-[0_0_0_3px_rgba(99,102,241,0.15)] placeholder:text-slate-500" required>
                 </div>
 
                 <div class="flex flex-col gap-1.5">
                     <label for="email" class="text-sm font-medium text-slate-400">Email <span class="text-red-400">*</span></label>
                     <input type="email" id="email" name="email" 
-                           value="<?= e(old('email', $user->email)) ?>" 
+                           value="<?= old('email', $user->email) ?>" 
                            class="w-full px-3 sm:px-3.5 py-2.5 text-sm font-sans text-slate-200 bg-input border border-border rounded-md outline-none transition-all duration-200 focus:border-accent focus:shadow-[0_0_0_3px_rgba(99,102,241,0.15)] placeholder:text-slate-500" required>
                 </div>
 
                 <div class="flex flex-col gap-1.5">
                     <label for="phone" class="text-sm font-medium text-slate-400">Phone</label>
                     <input type="text" id="phone" name="phone" 
-                           value="<?= e(old('phone', $user->phone)) ?>" 
+                           value="<?= old('phone', $user->phone) ?>" 
                            class="w-full px-3 sm:px-3.5 py-2.5 text-sm font-sans text-slate-200 bg-input border border-border rounded-md outline-none transition-all duration-200 focus:border-accent focus:shadow-[0_0_0_3px_rgba(99,102,241,0.15)] placeholder:text-slate-500">
                 </div>
 

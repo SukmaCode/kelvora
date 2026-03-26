@@ -1,3 +1,5 @@
+
+
 <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-6">
     <h2 class="text-lg font-semibold">All Products</h2>
     <a href="<?= url('/products/create') ?>" class="inline-flex items-center justify-center gap-1.5 px-5 py-2.5 text-sm font-medium rounded-md cursor-pointer transition-all duration-200 bg-accent text-white border border-accent hover:bg-accent-hover hover:-translate-y-px w-full sm:w-auto">+ Add Product</a>
@@ -24,9 +26,10 @@
                         <td colspan="8" class="text-center text-slate-500 px-4 py-6 text-sm border-b border-border">No products found.</td>
                     </tr>
                 <?php else: ?>
+                    <?php $num = 1; ?>
                     <?php foreach ($products as $product): ?>
-                        <tr class="hover:bg-indigo-500/[0.04] [&:last-child>td]:border-b-0">
-                            <td class="px-3 sm:px-4 py-3 text-sm border-b border-border align-middle"><?= e($product->id) ?></td>
+                    <tr class="hover:bg-indigo-500/[0.04] [&:last-child>td]:border-b-0">
+                            <td class="px-3 sm:px-4 py-3 text-sm border-b border-border align-middle"><?= e($num++) ?></td>
                             <td class="px-3 sm:px-4 py-3 text-sm border-b border-border align-middle"><strong><?= e($product->name) ?></strong></td>
                             <td class="px-3 sm:px-4 py-3 text-sm border-b border-border align-middle"><?= e($product->category ?? '-') ?></td>
                             <td class="px-3 sm:px-4 py-3 text-sm border-b border-border align-middle whitespace-nowrap"><?= format_rupiah($product->price) ?></td>

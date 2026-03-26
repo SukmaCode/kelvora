@@ -10,10 +10,6 @@
     <div class="p-4 sm:p-6">
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
             <div class="flex flex-col gap-1">
-                <span class="text-xs font-medium text-slate-500 uppercase tracking-wide">ID</span>
-                <span class="text-[0.95rem] text-slate-200"><?= e($user->id) ?></span>
-            </div>
-            <div class="flex flex-col gap-1">
                 <span class="text-xs font-medium text-slate-500 uppercase tracking-wide">Business Name</span>
                 <span class="text-[0.95rem] text-slate-200"><?= e($user->business_name) ?></span>
             </div>
@@ -31,7 +27,14 @@
             </div>
             <div class="flex flex-col gap-1">
                 <span class="text-xs font-medium text-slate-500 uppercase tracking-wide">Role</span>
-                <span class="text-[0.95rem] text-slate-200"><span class="inline-block px-2.5 py-0.5 text-xs font-semibold rounded-full capitalize tracking-tight bg-cyan-500/15 text-cyan-400"><?= e($user->role) ?></span></span>
+                <span class="text-[0.95rem] text-slate-200">
+                    <span class="inline-block px-2.5 py-0.5 text-xs font-semibold rounded-full capitalize tracking-tight 
+                        <?= $user->role === 'admin' 
+                        ? 'bg-purple-500/15 text-purple-400' 
+                        : 'bg-cyan-500/15 text-cyan-400' ?>">
+                        <?= e($user->role) ?>
+                    </span>
+                </span>
             </div>
             <div class="flex flex-col gap-1">
                 <span class="text-xs font-medium text-slate-500 uppercase tracking-wide">Status</span>

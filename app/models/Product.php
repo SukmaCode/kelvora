@@ -73,4 +73,13 @@ class Product extends BaseModel
         );
         return true;
     }
+
+    /**
+     * Count total products for a specific user.
+     */
+    public function countByUser(int $userId): int
+    {
+        $result = $this->rawOne("SELECT COUNT(*) as total FROM {$this->table} WHERE user_id = :user_id", ['user_id' => $userId]);
+        return (int) ($result->total ?? 0);
+    }
 }

@@ -27,7 +27,7 @@
                     <label for="price" class="text-sm font-medium text-slate-400">Price (Rp) <span class="text-red-400">*</span></label>
                     <input type="number" id="price" name="price" 
                            value="<?= old('price') ?>" 
-                           class="w-full px-3 sm:px-3.5 py-2.5 text-sm font-sans text-slate-200 bg-input border border-border rounded-md outline-none transition-all duration-200 focus:border-accent focus:shadow-[0_0_0_3px_rgba(99,102,241,0.15)] placeholder:text-slate-500" required min="1" step="100">
+                           class="w-full px-3 sm:px-3.5 py-2.5 text-sm font-sans text-slate-200 bg-input border border-border rounded-md outline-none transition-all duration-200 focus:border-accent focus:shadow-[0_0_0_3px_rgba(99,102,241,0.15)] placeholder:text-slate-500" required min="0">
                 </div>
 
                 <div class="flex flex-col gap-1.5">

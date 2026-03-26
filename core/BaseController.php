@@ -40,6 +40,10 @@ class BaseController
 
         // Render inside layout
         require BASE_PATH . '/app/views/layouts/sidebar.php';
+
+        // Clear flashed session data (errors & old input) after rendering the view
+        unset($_SESSION['errors']);
+        unset($_SESSION['old_input']);
     }
 
     /**

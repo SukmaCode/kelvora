@@ -67,4 +67,44 @@ class Order extends BaseModel
             ['user_id' => $userId]
         );
     }
+
+    /**
+     * Get system-wide total revenue.
+     */
+    public function getTotalRevenue(): float
+    {
+        $result = $this->rawOne("SELECT COALESCE(SUM(total_price), 0) as total_revenue FROM {$this->table}");
+        return (float) ($result->total_revenue ?? 0);
+    }
+
+    /**
+     * Get today's total sales for a user.
+     */
+    public function getTodaySales(int $userId): float
+    {
+        $result = $this->rawOne(
+            "SELECT COALESCE(SUM(total_price), 0) as total 
+             FROM {$this->table} 
+             WHERE user_id = :user_id 
+               AND DATE(created_at) = CURDATE()",
+            ['user_id' => $userId]
+        );
+        return (float) ($result->total ?? 0);
+    }
+
+    /**
+     * Get current month's revenue for a user.
+     */
+    public function getMonthlyRevenue(int $userId): float
+    {
+        $result = $this->rawOne(
+            "SELECT COALESCE(SUM(total_price), 0) as total 
+             FROM {$this->table} 
+             WHERE user_id = :user_id 
+               AND MONTH(created_at) = MONTH(CURDATE()) 
+               AND YEAR(created_at) = YEAR(CURDATE())",
+            ['user_id' => $userId]
+        );
+        return (float) ($result->total ?? 0);
+    }
 }
