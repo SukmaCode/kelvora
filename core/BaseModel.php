@@ -95,7 +95,7 @@ class BaseModel
     {
         $data = $this->filterFillable($data);
 
-        $columns = implode(', ', array_keys($data));
+        $columns      = implode(', ', array_keys($data));
         $placeholders = ':' . implode(', :', array_keys($data));
 
         $sql = "INSERT INTO {$this->table} ({$columns}) VALUES ({$placeholders})";

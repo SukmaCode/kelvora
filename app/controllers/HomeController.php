@@ -18,6 +18,11 @@ class HomeController extends BaseController
     {
         $this->requireAuth();
 
+        if ($_SESSION['user_role'] === 'customer') {
+            $this->redirect('');
+            return;
+        }
+
         if ($_SESSION['user_role'] === 'admin') {
             $userModel = new User();
             $productModel = new Product();

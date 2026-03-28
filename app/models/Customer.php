@@ -29,4 +29,15 @@ class Customer extends BaseModel
             ['user_id' => $userId]
         );
     }
+
+    /**
+     * Get customer by owner ID and phone (used as email fallback).
+     */
+    public function findByOwnerAndPhone(int $ownerId, string $phone): ?object
+    {
+        return $this->rawOne(
+            "SELECT * FROM {$this->table} WHERE user_id = :uid AND phone = :phone", 
+            ['uid' => $ownerId, 'phone' => $phone]
+        );
+    }
 }

@@ -14,20 +14,34 @@
 // =========================================================================
 // Landing Page (public, no sidebar layout)
 // =========================================================================
-$router->get('landing',  'LandingController@index');
+$router->get('',  'LandingController@index');
+$router->post('order/checkout', 'LandingController@checkout');
 
 // =========================================================================
 // Authentication
 // =========================================================================
 $router->get('login',    'AuthController@loginForm');
 $router->post('login',   'AuthController@login');
+$router->get('register', 'AuthController@registerForm');
+$router->post('register','AuthController@register');
 $router->post('logout',  'AuthController@logout');
 $router->get('logout',   'AuthController@logout'); // Allow GET for simple usage if needed
+
+// OTP & Additional Auth actions
+$router->get('auth/verify-email',      'AuthController@showVerify');
+$router->post('auth/verify-email-otp', 'AuthController@verifyEmailOtp');
+$router->post('auth/resend-otp',       'AuthController@resendOtp');
+
+// =========================================================================
+// Profile (Edit own profile)
+// =========================================================================
+$router->get('profile',        'ProfileController@edit');
+$router->post('profile/update','ProfileController@update');
 
 // =========================================================================
 // Home / Dashboard
 // =========================================================================
-$router->get('',  'HomeController@index');
+$router->get('home',  'HomeController@index');
 
 // =========================================================================
 // Users (Full CRUD)

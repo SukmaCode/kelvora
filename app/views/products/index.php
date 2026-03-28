@@ -10,7 +10,7 @@
         <table class="w-full border-collapse min-w-[650px]">
             <thead>
                 <tr>
-                    <th class="px-3 sm:px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-400 bg-black/20 border-b border-border">ID</th>
+                    <th class="px-3 sm:px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-400 bg-black/20 border-b border-border">NO</th>
                     <th class="px-3 sm:px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-400 bg-black/20 border-b border-border">Name</th>
                     <th class="px-3 sm:px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-400 bg-black/20 border-b border-border">Category</th>
                     <th class="px-3 sm:px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-400 bg-black/20 border-b border-border">Price</th>

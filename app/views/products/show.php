@@ -10,10 +10,6 @@
     <div class="p-4 sm:p-6">
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
             <div class="flex flex-col gap-1">
-                <span class="text-xs font-medium text-slate-500 uppercase tracking-wide">ID</span>
-                <span class="text-[0.95rem] text-slate-200"><?= e($product->id) ?></span>
-            </div>
-            <div class="flex flex-col gap-1">
                 <span class="text-xs font-medium text-slate-500 uppercase tracking-wide">Name</span>
                 <span class="text-[0.95rem] text-slate-200"><?= e($product->name) ?></span>
             </div>

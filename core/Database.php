@@ -80,7 +80,26 @@ class Database
     public function query(string $sql, array $params = []): \PDOStatement
     {
         $stmt = $this->getConnection()->prepare($sql);
-        $stmt->execute($params);
+        
+        if (empty($params)) {
+            $stmt->execute();
+            return $stmt;
+        }
+
+        // ✅ Deteksi apakah named atau positional
+        $isNamed = array_keys($params) !== range(0, count($params) - 1);
+
+        if ($isNamed) {
+            // Bind satu per satu — hindari PDO salah baca ':' di dalam nilai string
+            foreach ($params as $key => $value) {
+                $stmt->bindValue(':' . $key, $value);
+            }
+            $stmt->execute();
+        } else {
+            // Positional — langsung execute
+            $stmt->execute($params);
+        }
+
         return $stmt;
     }
 

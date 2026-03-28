@@ -19,6 +19,9 @@ class User extends BaseModel
         'email',
         'phone',
         'password_hash',
+        'pin_hash',
+        'is_verified',
+        'email_verified_at',
         'role',
         'active_subscription_id',
         'status',
@@ -30,6 +33,14 @@ class User extends BaseModel
     public function findByEmail(string $email): ?object
     {
         return $this->findOneBy('email', $email);
+    }
+
+    /**
+     * Find a user by phone number.
+     */
+    public function findByPhone(string $phone): ?object
+    {
+        return $this->findOneBy('phone', $phone);
     }
 
     /**
@@ -74,5 +85,53 @@ class User extends BaseModel
         }
 
         return (int) $this->rawOne($sql, $params)->total > 0;
+    }
+    public function phoneExists(string $phone, ?int $excludeId = null): bool
+    {
+        $sql = "SELECT COUNT(*) as total FROM {$this->table} WHERE phone = :phone";
+        $params = ['phone' => $phone];
+
+        if ($excludeId) {
+            $sql .= " AND id != :id";
+            $params['id'] = $excludeId;
+        }
+
+        return (int) $this->rawOne($sql, $params)->total > 0;
+    }
+
+    /**
+     * Set a new PIN for a user.
+     */
+    public function setPin(int $userId, string $plainPin): void
+    {
+        $pinHash = password_hash($plainPin, PASSWORD_BCRYPT);
+        $this->update($userId, [
+            'pin_hash' => $pinHash,
+            'is_verified' => 1
+        ]);
+    }
+
+    /**
+     * Verify a user's PIN.
+     */
+    public function verifyPin(object $user, string $plainPin): bool
+    {
+        return password_verify($plainPin, $user->pin_hash ?? '');
+    }
+
+    /**
+     * Update a user's phone number.
+     */
+    public function updatePhone(int $userId, string $newPhone): void
+    {
+        $this->update($userId, ['phone' => $newPhone]);
+    }
+
+    /**
+     * Mark a user's email as verified.
+     */
+    public function markEmailAsVerified(int $userId): void
+    {
+        $this->update($userId, ['email_verified_at' => date('Y-m-d H:i:s')]);
     }
 }

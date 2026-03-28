@@ -50,6 +50,20 @@ class Product extends BaseModel
     }
 
     /**
+     * Get all active products across all users with business name.
+     */
+    public function findAllActive(): array
+    {
+        return $this->raw(
+            "SELECT p.*, u.business_name 
+             FROM {$this->table} p 
+             JOIN users u ON p.user_id = u.id 
+             WHERE p.status = 'active'
+             ORDER BY p.created_at DESC"
+        );
+    }
+
+    /**
      * Search products by name.
      */
     public function search(string $keyword, int $userId): array

@@ -67,6 +67,14 @@
             -ms-overflow-style: none;
             scrollbar-width: none;
         }
+        @keyframes fadeDown {
+            from { opacity: 0; transform: translateY(-8px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeDownMobile {
+            from { opacity: 0; transform: translateY(-8px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
     </style>
 </head>
 <body class="antialiased selection:bg-primary selection:text-white">
@@ -74,21 +82,111 @@
     <!-- 1. NAVIGATION BAR -->
     <nav class="sticky top-0 z-50 bg-[#E0F2F4]/80 backdrop-blur-lg border-b border-[#2D3BD9]/10">
         <div class="container-custom flex items-center justify-between h-[72px]">
-            <a href="#" class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-soft">⚡</div>
+            <a href="#" class="flex items-center justify-center gap-3">
+                <img src="<?= url('public/assets/images/logo-biru.png') ?>" alt="Logo" class="w-8 h-8">
                 <span class="font-heading text-2xl text-txtmain tracking-tight mt-1">Kelvora</span>
             </a>
+            <!-- Navbar Desktop -->
             <div class="hidden md:flex items-center gap-8 text-[14px] font-semibold uppercase text-txtmain/70">
+                <?php if (($_SESSION['user_role'] ?? '') !== 'customer'): ?>
                 <a href="#fitur" class="hover:text-primary transition-colors">Fitur</a>
                 <a href="#cara-kerja" class="hover:text-primary transition-colors">Cara Kerja</a>
                 <a href="#harga" class="hover:text-primary transition-colors">Harga</a>
+                <?php endif; ?>
+            </div>
+            <!-- Navbar Mobile -->
+            <div id="navbarMobile" class="hidden md:hidden absolute z-1 w-full right-0 top-0 p-8 bg-[#E0F2F4] backdrop-blur-lg flex flex-col gap-6 text-[14px] font-semibold uppercase text-txtmain/70" style="animation: fadeDownMobile .2s ease">
+                <?php if (!empty($_SESSION['user_id'])): ?>
+                    <?php
+                        $displayName = $_SESSION['owner_name'] ?? $_SESSION['business_name'] ?? 'U';
+                        $nameParts = explode(' ', trim($displayName));
+                        $initials = strtoupper(substr($nameParts[0], 0, 1));
+                        if (count($nameParts) > 1) {
+                            $initials .= strtoupper(substr(end($nameParts), 0, 1));
+                        }
+                    ?>
+                    <?php if (($_SESSION['user_role'] ?? '') !== 'customer'): ?>
+                    <a href="#fitur" class="hover:text-primary transition-colors">Fitur</a>
+                    <a href="#cara-kerja" class="hover:text-primary transition-colors">Cara Kerja</a>
+                    <a href="#harga" class="hover:text-primary transition-colors">Harga</a>
+                    <?php endif; ?>
+                    <!-- Profile Menu -->
+                    <button onclick="toggleProfileMenu()" class="w-10 h-10 rounded-full bg-primary text-white font-bold text-sm flex items-center justify-center shadow-soft hover:bg-secondary transition-all focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-2 focus:ring-offset-[#E0F2F4]" aria-label="Menu profil">
+                        <?= e($initials) ?>
+                    </button>
+
+                <?php else: ?>
+                    <a href="<?= url('login') ?>" class=" font-bold text-[15px] text-txtmain hover:text-primary transition-colors">Masuk</a>
+                    <a href="<?= url('register') ?>" class="inline-flex items-center justify-center h-[44px] px-6 bg-primary text-white font-bold text-[15px] rounded-xl hover:bg-secondary transition-all shadow-soft hover:-translate-y-0.5">Daftar Sekarang</a>
+                <?php endif; ?>
             </div>
             <div class="flex items-center gap-4">
-                <a href="<?= url('login') ?>" class="hidden md:block font-bold text-[15px] text-txtmain hover:text-primary transition-colors">Masuk</a>
-                <a href="<?= url('register') ?>" class="inline-flex items-center justify-center h-[44px] px-6 bg-primary text-white font-bold text-[15px] rounded-xl hover:bg-secondary transition-all shadow-soft hover:-translate-y-0.5">Daftar Sekarang</a>
+                <?php if (!empty($_SESSION['user_id'])): ?>
+                    <?php
+                        $displayName = $_SESSION['owner_name'] ?? $_SESSION['business_name'] ?? 'U';
+                        $nameParts = explode(' ', trim($displayName));
+                        $initials = strtoupper(substr($nameParts[0], 0, 1));
+                        if (count($nameParts) > 1) {
+                            $initials .= strtoupper(substr(end($nameParts), 0, 1));
+                        }
+                    ?>
+                    <div class="relative" id="profileDropdown">
+                        <div class="flex justify-center items-center gap-4">
+                            <!-- Profile User Desktop -->
+                            <button onclick="toggleProfileMenu()" class="hidden md:flex w-10 h-10 rounded-full bg-primary text-white font-bold text-sm flex items-center justify-center shadow-soft hover:bg-secondary transition-all focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-2 focus:ring-offset-[#E0F2F4]" aria-label="Menu profil">
+                                <?= e($initials) ?>
+                            </button>
+                            <!-- Hamburger Bar -->
+                            <button class="flex flex-col gap-1 p-2 md:hidden" onclick="toggleNavbarMobile()">
+                                <span class="w-4 h-0.5 bg-black"></span>
+                                <span class="w-4 h-0.5 bg-black"></span>
+                                <span class="w-4 h-0.5 bg-black"></span>
+                            </button>
+                        </div>
+                        <!-- Modal/Overlay Profile -->
+                        <div id="profileMenu" class="hidden absolute right-0 mt-3 w-64 bg-surface rounded-xl shadow-floating border border-txtmain/5 overflow-hidden z-50" style="animation: fadeDown .2s ease">
+                            <div class="px-5 py-4 border-b border-txtmain/5">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-primary text-white font-bold text-sm flex items-center justify-center flex-shrink-0"><?= e($initials) ?></div>
+                                    <div class="min-w-0">
+                                        
+                                        <p class="font-bold text-sm text-txtmain truncate"><?= e($displayName) ?></p>
+                                        <p class="text-xs text-txtmain/50 truncate"><?= e($_SESSION['business_name'] ?? '') ?></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="py-2">
+                                <?php if (($_SESSION['user_role'] ?? '') !== 'customer'): ?>
+                                <a href="<?= url('home') ?>" class="flex items-center gap-3 px-5 py-2.5 text-sm font-semibold text-txtmain/70 hover:bg-brandBg hover:text-primary transition-colors">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
+                                    Dashboard
+                                </a>
+                                <?php endif; ?>
+                                
+                                <a href="<?= url('profile') ?>" class="flex items-center gap-3 px-5 py-2.5 text-sm font-semibold text-txtmain/70 hover:bg-brandBg hover:text-primary transition-colors">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                                    Edit Profil
+                                </a>
+                            </div>
+                            <div class="border-t border-txtmain/5 py-2">
+                                <a href="<?= url('logout') ?>" class="flex items-center gap-3 px-5 py-2.5 text-sm font-semibold text-red-500 hover:bg-red-50 transition-colors">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+                                    Keluar
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                <?php else: ?>
+                    <a href="<?= url('login') ?>" class="hidden md:block font-bold text-[15px] text-txtmain hover:text-primary transition-colors">Masuk</a>
+                    <a href="<?= url('register') ?>" class="inline-flex items-center justify-center h-[44px] px-6 bg-primary text-white font-bold text-[15px] rounded-xl hover:bg-secondary transition-all shadow-soft hover:-translate-y-0.5">Daftar Sekarang</a>
+                <?php endif; ?>
             </div>
         </div>
     </nav>
+
+    <?php if (($_SESSION['user_role'] ?? '') === 'customer'): ?>
+        <?php require BASE_PATH . '/app/views/landing/storefront.php'; ?>
+    <?php else: ?>
 
     <!-- 1. HERO SECTION -->
     <section class="pt-20 pb-24 overflow-hidden relative">
@@ -521,6 +619,8 @@
         </div>
     </section>
 
+    <?php endif; ?>
+
     <!-- 8. FOOTER -->
     <footer class="bg-surface pt-16 pb-8 border-t border-txtmain/5">
         <div class="container-custom">
@@ -581,5 +681,22 @@
         </div>
     </footer>
 
+<script>
+    function toggleProfileMenu() {
+        const menu = document.getElementById('profileMenu');
+        menu.classList.toggle('hidden');
+    }
+    function toggleNavbarMobile() {
+        const menu = document.getElementById('navbarMobile');
+        menu.classList.toggle('hidden');
+    }
+    document.addEventListener('click', function(e) {
+        const dropdown = document.getElementById('profileDropdown');
+        const menu = document.getElementById('profileMenu');
+        if (dropdown && menu && !dropdown.contains(e.target)) {
+            menu.classList.add('hidden');
+        }
+    });
+</script>
 </body>
 </html>
