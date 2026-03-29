@@ -17,15 +17,17 @@ USE kelvora;
 CREATE TABLE IF NOT EXISTS users (
     id INT PRIMARY KEY AUTO_INCREMENT,
     business_name VARCHAR(150) NOT NULL,
-    owner_name VARCHAR(150) NOT NULL,
+    name VARCHAR(150) NOT NULL,
     email VARCHAR(150) UNIQUE NOT NULL,
     phone VARCHAR(30),
+    profile_image VARCHAR(255) NULL,
     password_hash TEXT NOT NULL,
     role ENUM('admin', 'owner') DEFAULT 'owner',
     active_subscription_id INT,
     status VARCHAR(20) DEFAULT 'active',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    last_login_at TIMESTAMP NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- =========================

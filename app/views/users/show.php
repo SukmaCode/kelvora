@@ -15,7 +15,7 @@
             </div>
             <div class="flex flex-col gap-1">
                 <span class="text-xs font-medium text-slate-500 uppercase tracking-wide">Owner Name</span>
-                <span class="text-[0.95rem] text-slate-200"><?= e($user->owner_name) ?></span>
+                <span class="text-[0.95rem] text-slate-200"><?= e($user->name) ?></span>
             </div>
             <div class="flex flex-col gap-1">
                 <span class="text-xs font-medium text-slate-500 uppercase tracking-wide">Email</span>

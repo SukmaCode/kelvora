@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use Core\BaseController;
+use Core\ImageUploader;
 use App\Models\User;
 
 /**
@@ -140,6 +141,85 @@ class ProfileController extends BaseController
         unset($_SESSION['errors']);
 
         $this->setFlash('success', 'Profil berhasil diperbarui.');
+        $this->redirect('profile');
+    }
+
+    /**
+     * Upload and crop a new profile photo.
+     */
+    public function uploadPhoto(): void
+    {
+        $this->requireAuth();
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            $this->redirect('profile');
+        }
+
+        $this->validateCsrfToken();
+
+        $userId = $_SESSION['user_id'];
+        $user = $this->userModel->findById($userId);
+
+        if (!$user) {
+            $this->setFlash('danger', 'User tidak valid.');
+            $this->redirect('');
+        }
+
+        if (!isset($_FILES['profile_image'])) {
+            $this->setFlash('danger', 'Silakan pilih gambar terlebih dahulu.');
+            $this->redirect('profile');
+        }
+
+        $cropData = $this->input('crop_data', null);
+        $uploader = new ImageUploader(BASE_PATH . '/public/uploads/profile');
+
+        try {
+            // Process new file upload
+            $newFileName = $uploader->uploadImage($_FILES['profile_image'], $cropData, 'profile_' . $userId);
+
+            // Delete old file if exists
+            if (!empty($user->profile_image)) {
+                $uploader->deleteImage($user->profile_image);
+            }
+
+            // Update database and session
+            $this->userModel->updateProfileImage($userId, $newFileName);
+            $_SESSION['profile_image'] = $newFileName;
+
+            $this->setFlash('success', 'Foto profil berhasil diperbarui.');
+        } catch (\Exception $e) {
+            $this->setFlash('danger', $e->getMessage());
+        }
+
+        $this->redirect('profile');
+    }
+
+    /**
+     * Delete the current profile photo.
+     */
+    public function deletePhoto(): void
+    {
+        $this->requireAuth();
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            $this->redirect('profile');
+        }
+
+        $this->validateCsrfToken();
+
+        $userId = $_SESSION['user_id'];
+        $user = $this->userModel->findById($userId);
+
+        if ($user && !empty($user->profile_image)) {
+            $uploader = new ImageUploader(BASE_PATH . '/public/uploads/profile');
+            $uploader->deleteImage($user->profile_image);
+
+            $this->userModel->deleteProfileImage($userId);
+            unset($_SESSION['profile_image']);
+
+            $this->setFlash('success', 'Foto profil berhasil dihapus.');
+        }
+
         $this->redirect('profile');
     }
 }

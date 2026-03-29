@@ -307,7 +307,11 @@ class AuthController extends BaseController
         $_SESSION['business_name'] = $user->business_name;
         $_SESSION['email'] = $user->email;
         $_SESSION['phone'] = $user->phone;
+        $_SESSION['profile_image'] = $user->profile_image;
         $_SESSION['user_role'] = $user->role;
+
+        // Update last login timestamp
+        $this->userModel->updateLastLogin($user->id);
     }
 
     protected function view(string $view, array $data = []): void

@@ -17,9 +17,9 @@
                 </div>
 
                 <div class="flex flex-col gap-1.5">
-                    <label for="owner_name" class="text-sm font-medium text-slate-400">Owner Name <span class="text-red-400">*</span></label>
-                    <input type="text" id="owner_name" name="owner_name" 
-                           value="<?= old('owner_name', $user->owner_name) ?>" 
+                    <label for="name" class="text-sm font-medium text-slate-400">Owner Name <span class="text-red-400">*</span></label>
+                    <input type="text" id="name" name="name" 
+                           value="<?= old('name', $user->name) ?>" 
                            class="w-full px-3 sm:px-3.5 py-2.5 text-sm font-sans text-slate-200 bg-input border border-border rounded-md outline-none transition-all duration-200 focus:border-accent focus:shadow-[0_0_0_3px_rgba(99,102,241,0.15)] placeholder:text-slate-500" required>
                 </div>
 

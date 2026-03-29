@@ -37,6 +37,8 @@ $router->post('auth/resend-otp',       'AuthController@resendOtp');
 // =========================================================================
 $router->get('profile',        'ProfileController@edit');
 $router->post('profile/update','ProfileController@update');
+$router->post('profile/upload-photo', 'ProfileController@uploadPhoto');
+$router->post('profile/delete-photo', 'ProfileController@deletePhoto');
 
 // =========================================================================
 // Home / Dashboard

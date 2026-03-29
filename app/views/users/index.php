@@ -5,24 +5,25 @@
 
 <div class="border border-border rounded-[6px] shadow-[0_4px_24px_rgba(0,0,0,0.25)] overflow-hidden">
     <div class="overflow-x-auto">
-        <table class="w-full border-collapse min-w-[700px]">
+        <table class="w-full border-collapse min-w-[900px]">
             <thead>
                 <tr class="bg-[#2d3bd9]">
-                    <th class="px-2 py-4 text-left text-xs font-semibold uppercase tracking-wide text-white bg-black/20 border-b border-border">ID</th>
-                    <th class="px-2 py-4 text-left text-xs font-semibold uppercase tracking-wide text-white bg-black/20 border-b border-border">Business Name</th>
-                    <th class="px-2 py-4 text-left text-xs font-semibold uppercase tracking-wide text-white bg-black/20 border-b border-border">Owner</th>
-                    <th class="px-2 py-4 text-left text-xs font-semibold uppercase tracking-wide text-white bg-black/20 border-b border-border">Email</th>
-                    <th class="px-2 py-4 text-left text-xs font-semibold uppercase tracking-wide text-white bg-black/20 border-b border-border">Phone</th>
-                    <th class="px-2 py-4 text-left text-xs font-semibold uppercase tracking-wide text-white bg-black/20 border-b border-border">Role</th>
-                    <th class="px-2 py-4 text-left text-xs font-semibold uppercase tracking-wide text-white bg-black/20 border-b border-border">Status</th>
-                    <th class="px-2 py-4 text-left text-xs font-semibold uppercase tracking-wide text-white bg-black/20 border-b border-border">Created</th>
-                    <th class="px-2 py-4 text-left text-xs font-semibold uppercase tracking-wide text-white bg-black/20 border-b border-border">Actions</th>
+                    <th class="px-2 py-4 text-left text-xs font-semibold uppercase tracking-wide text-white border-b border-border">ID</th>
+                    <th class="px-2 py-4 text-left text-xs font-semibold uppercase tracking-wide text-white border-b border-border">Business Name</th>
+                    <th class="px-2 py-4 text-left text-xs font-semibold uppercase tracking-wide text-white border-b border-border">Name</th>
+                    <th class="px-2 py-4 text-left text-xs font-semibold uppercase tracking-wide text-white border-b border-border">Email</th>
+                    <th class="px-2 py-4 text-left text-xs font-semibold uppercase tracking-wide text-white border-b border-border">Phone</th>
+                    <th class="px-2 py-4 text-left text-xs font-semibold uppercase tracking-wide text-white border-b border-border">Role</th>
+                    <th class="px-2 py-4 text-left text-xs font-semibold uppercase tracking-wide text-white border-b border-border">Status</th>
+                    <th class="px-2 py-4 text-left text-xs font-semibold uppercase tracking-wide text-white border-b border-border">Created</th>
+                    <th class="px-2 py-4 text-left text-xs font-semibold uppercase tracking-wide text-white border-b border-border">Last Visit</th>
+                    <th class="px-2 py-4 text-left text-xs font-semibold uppercase tracking-wide text-white border-b border-border">Actions</th>
                 </tr>
             </thead>
             <tbody>
                 <?php if (empty($users)): ?>
                     <tr>
-                        <td colspan="9" class="text-center text-slate-500 px-4 py-6 text-sm border-b border-border">No users found.</td>
+                        <td colspan="10" class="text-center text-slate-500 px-4 py-6 text-sm border-b border-border">No users found.</td>
                     </tr>
                 <?php else: ?>
                     <?php $num = 1; ?>
@@ -30,7 +31,7 @@
                         <tr class="hover:bg-indigo-500/[0.04] [&:last-child>td]:border-b-0">
                             <td class="px-2 py-4 text-sm text-black border-b border-border align-middle"><?= ($num++) ?></td>
                             <td class="px-2 py-4 text-sm text-black border-b border-border align-middle"><strong><?= e($user->business_name ? $user->business_name : "-") ?></strong></td>
-                            <td class="px-2 py-4 text-sm text-black border-b border-border align-middle"><?= e($user->owner_name ?? "-") ?></td>
+                            <td class="px-2 py-4 text-sm text-black border-b border-border align-middle"><?= e($user->name ?? "-") ?></td>
                             <td class="px-2 py-4 text-sm text-black border-b border-border align-middle"><?= e($user->email ?? "-") ?></td>
                             <td class="px-2 py-4 text-sm text-black border-b border-border align-middle"><?= e($user->phone ?? "-") ?></td>
                             <td class="px-2 py-4 text-sm text-black border-b border-border align-middle">
@@ -46,7 +47,10 @@
                                     <?= e($user->status) ?>
                                 </span>
                             </td>
-                            <td class="px-2 py-4 text-sm border-b border-border align-middle"><?= format_date($user->created_at) ?></td>
+                            <td class="px-2 py-4 text-sm text-black border-b border-border align-middle"><?= format_date($user->created_at) ?></td>
+                            <td class="px-2 py-4 text-sm text-black border-b border-border align-middle">
+                                <?= $user->last_login_at ? format_date($user->last_login_at) : '<span class="text-slate-400 italic">Never</span>' ?>
+                            </td>
                             <td class="px-2 py-4 text-sm border-b border-border align-middle">
                                 <div class="flex gap-1.5 items-center flex-nowrap">
                                     <a href="<?= url("/users/{$user->id}") ?>" class="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium rounded-md cursor-pointer transition-all duration-200 bg-cyan-500/15 text-cyan-400 border border-cyan-500/30 hover:bg-cyan-500/25" title="View">👁</a>

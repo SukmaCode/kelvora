@@ -140,9 +140,9 @@
                                class="w-full h-[44px] px-4 bg-white border border-slate-200 rounded-xl text-brandText focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all placeholder-slate-400 font-medium"
                                placeholder="Toko Makmur">
                     </div>
-                    <div id="owner_name_container" class="space-y-1.5">
-                        <label for="owner_name" class="text-sm font-semibold">Nama Lengkap</label>
-                        <input type="text" id="owner_name" name="owner_name" required
+                    <div id="name_container" class="space-y-1.5">
+                        <label for="name" class="text-sm font-semibold">Nama Lengkap</label>
+                        <input type="text" id="name" name="name" required
                                class="w-full h-[44px] px-4 bg-white border border-slate-200 rounded-xl text-brandText focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all placeholder-slate-400 font-medium"
                                placeholder="Budi Raharjo">
                     </div>
@@ -302,7 +302,7 @@
         formData.append('csrf_token', CSRF_TOKEN);
         formData.append('role', document.getElementById('role').value);
         formData.append('business_name', document.getElementById('business_name').value);
-        formData.append('owner_name', document.getElementById('owner_name').value);
+        formData.append('name', document.getElementById('name').value);
         formData.append('email', document.getElementById('email').value);
         formData.append('phone', document.getElementById('phone').value);
         formData.append('password', document.getElementById('password').value);

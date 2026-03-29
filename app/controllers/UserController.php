@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use Core\BaseController;
+use Core\ImageUploader;
 use App\Models\User;
 
 /**
@@ -202,6 +203,11 @@ class UserController extends BaseController
             $this->setFlash('danger', 'User not found.');
             $this->redirect('/users');
             return;
+        }
+
+        if (!empty($user->profile_image)) {
+            $uploader = new ImageUploader(BASE_PATH . '/public/uploads/profile');
+            $uploader->deleteImage($user->profile_image);
         }
 
         $this->userModel->delete($id);

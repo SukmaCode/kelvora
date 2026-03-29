@@ -11,19 +11,51 @@
     $errors = $_SESSION['errors'] ?? [];
 ?>
 
+<!-- Include Cropper.js -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+
 <!-- Profile Edit Page -->
 <div class="max-w-3xl mx-auto">
 
     <!-- Profile Header Card -->
     <div class="bg-card rounded-xl border border-border p-6 sm:p-8 mb-6">
         <div class="flex flex-col sm:flex-row items-center gap-6">
-            <!-- Avatar -->
-            <div class="w-20 h-20 rounded-full bg-accent flex items-center justify-center text-white font-bold text-2xl flex-shrink-0 shadow-lg">
-                <?= e($initials) ?>
+            
+            <!-- Avatar Section -->
+            <div class="flex flex-col items-center sm:items-start gap-3">
+                <div class="relative w-24 h-24 sm:w-28 sm:h-28 rounded-full border-4 border-card shadow-lg bg-accent flex items-center justify-center text-white font-bold text-3xl flex-shrink-0 overflow-hidden group">
+                    <?php if (!empty($user->profile_image)): ?>
+                        <img src="<?= url('public/uploads/profile/' . $user->profile_image) ?>" alt="Profile" class="w-full h-full object-cover">
+                    <?php else: ?>
+                        <?= e($initials) ?>
+                    <?php endif; ?>
+                    
+                    <!-- Overlay Upload -->
+                    <label for="profile_upload" class="absolute inset-0 bg-black/50 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+                        <svg class="w-6 h-6 text-white mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                        <span class="text-[10px] font-medium text-white">Ganti</span>
+                    </label>
+                </div>
+                
+                <?php if (!empty($user->profile_image)): ?>
+                <form action="<?= url('/profile/delete-photo') ?>" method="POST" onsubmit="return confirm('Yakin ingin menghapus foto profil?');">
+                    <?= csrf_field() ?>
+                    <button type="submit" class="text-xs text-red-400 hover:text-red-300 transition-colors font-medium">Hapus Foto</button>
+                </form>
+                <?php endif; ?>
             </div>
+
+            <!-- Hidden Form for Upload -->
+            <form id="uploadForm" action="<?= url('/profile/upload-photo') ?>" method="POST" enctype="multipart/form-data" class="hidden">
+                <?= csrf_field() ?>
+                <input type="file" id="profile_upload" name="profile_image" accept="image/jpeg,image/png,image/webp">
+                <input type="hidden" id="crop_data" name="crop_data">
+            </form>
+
             <!-- Info -->
             <div class="text-center sm:text-left">
-                <h2 class="text-xl font-bold text-slate-100"><?= e($user->owner_name ?? '') ?></h2>
+                <h2 class="text-xl font-bold text-slate-100"><?= e($user->name ?? '') ?></h2>
                 <p class="text-sm text-slate-400 mt-1"><?= e($user->business_name ?? '') ?></p>
                 <div class="flex items-center gap-3 mt-3 justify-center sm:justify-start">
                     <span class="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full <?= $user->status === 'active' ? 'bg-green-500/10 text-green-400 border border-green-500/20' : 'bg-red-500/10 text-red-400 border border-red-500/20' ?>">
@@ -46,8 +78,9 @@
         <form action="<?= url('/profile/update') ?>" method="POST" class="space-y-6">
             <?= csrf_field() ?>
 
-            <!-- Row 1: Nama Bisnis + Nama Owner -->
+            <!-- Row 1: Nama Bisnis + Nama Lengkap -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <?php if ($user->role === 'owner'): ?>
                 <div>
                     <label for="business_name" class="block text-sm font-medium text-slate-300 mb-2">Nama Bisnis</label>
                     <input type="text" id="business_name" name="business_name"
@@ -59,16 +92,21 @@
                         <p class="text-xs text-red-400 mt-1.5"><?= e($errors['business_name']) ?></p>
                     <?php endif; ?>
                 </div>
+                <?php else: ?>
+                <div class="hidden">
+                    <input type="hidden" name="business_name" value="<?= e($user->business_name ?? '') ?>">
+                </div>
+                <?php endif; ?>
 
-                <div>
-                    <label for="owner_name" class="block text-sm font-medium text-slate-300 mb-2">Nama Owner</label>
-                    <input type="text" id="owner_name" name="owner_name"
-                           value="<?= old('owner_name', e($user->owner_name ?? '')) ?>"
+                <div class="<?= $user->role !== 'owner' ? 'sm:col-span-2' : '' ?>">
+                    <label for="name" class="block text-sm font-medium text-slate-300 mb-2">Nama Lengkap</label>
+                    <input type="text" id="name" name="name"
+                           value="<?= old('name', e($user->name ?? '')) ?>"
                            required
-                           class="w-full px-4 py-3 bg-input border <?= !empty($errors['owner_name']) ? 'border-red-500' : 'border-border' ?> rounded-lg text-slate-200 focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all placeholder-slate-500"
+                           class="w-full px-4 py-3 bg-input border <?= !empty($errors['name']) ? 'border-red-500' : 'border-border' ?> rounded-lg text-slate-200 focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all placeholder-slate-500"
                            placeholder="Budi Santoso">
-                    <?php if (!empty($errors['owner_name'])): ?>
-                        <p class="text-xs text-red-400 mt-1.5"><?= e($errors['owner_name']) ?></p>
+                    <?php if (!empty($errors['name'])): ?>
+                        <p class="text-xs text-red-400 mt-1.5"><?= e($errors['name']) ?></p>
                     <?php endif; ?>
                 </div>
             </div>
@@ -152,12 +190,113 @@
     </div>
 </div>
 
+<!-- Modal for Crop Image -->
+<div id="cropModal" class="fixed inset-0 z-[110] hidden bg-black/80 items-center justify-center p-4">
+    <div class="bg-card rounded-xl border border-border w-full max-w-lg overflow-hidden shadow-2xl flex flex-col">
+        <div class="p-4 border-b border-border flex justify-between items-center bg-card">
+            <h3 class="text-white font-semibold">Sesuaikan Foto</h3>
+            <button type="button" onclick="closeCropModal()" class="text-slate-400 hover:text-white transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+        <div class="p-4 bg-black flexItems-center justify-center relative min-h-[300px] max-h-[60vh] overflow-hidden">
+            <img id="imageToCrop" src="" alt="To Crop" class="max-w-full block">
+        </div>
+        <div class="p-4 border-t border-border bg-card flex justify-end gap-3">
+            <button type="button" onclick="closeCropModal()" class="px-4 py-2 border border-border text-slate-300 rounded hover:bg-slate-800 transition-colors text-sm font-medium">Batal</button>
+            <button type="button" onclick="submitCrop()" class="px-4 py-2 bg-accent text-white rounded hover:bg-accent-hover transition-colors text-sm font-medium">Terapkan & Simpan</button>
+        </div>
+    </div>
+</div>
+
 <script>
+// Password toggle
 function togglePwd(inputId, btn) {
     const input = document.getElementById(inputId);
     const isHidden = input.type === 'password';
     input.type = isHidden ? 'text' : 'password';
     btn.querySelector('.eye-open').classList.toggle('hidden', isHidden);
     btn.querySelector('.eye-closed').classList.toggle('hidden', !isHidden);
+}
+
+// Image Cropper Logic
+let cropper = null;
+const fileInput = document.getElementById('profile_upload');
+const cropModal = document.getElementById('cropModal');
+const imageToCrop = document.getElementById('imageToCrop');
+const uploadForm = document.getElementById('uploadForm');
+const cropDataInput = document.getElementById('crop_data');
+
+fileInput.addEventListener('change', function(e) {
+    if (e.target.files && e.target.files.length > 0) {
+        let file = e.target.files[0];
+        
+        // Validation size (2MB) inside client
+        if (file.size > 2 * 1024 * 1024) {
+            alert('Ukuran file maksimal 2MB.');
+            fileInput.value = '';
+            return;
+        }
+
+        // Validate type
+        if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) {
+            alert('Format tidak didukung. Harap upload gambar JPG, PNG, atau WebP.');
+            fileInput.value = '';
+            return;
+        }
+
+        let reader = new FileReader();
+        reader.onload = function(event) {
+            imageToCrop.src = event.target.result;
+            cropModal.classList.remove('hidden');
+            cropModal.classList.add('flex');
+            
+            // Initialize cropper after image loads
+            if (cropper) {
+                cropper.destroy();
+            }
+            
+            cropper = new Cropper(imageToCrop, {
+                aspectRatio: 1, // 1:1 like instagram
+                viewMode: 1, // Restrict crop box to not exceed the canvas
+                dragMode: 'move',
+                autoCropArea: 0.9,
+                guides: false,
+                center: true,
+                highlight: false,
+                cropBoxMovable: true,
+                cropBoxResizable: true,
+                toggleDragModeOnDblclick: false,
+            });
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+function closeCropModal() {
+    cropModal.classList.add('hidden');
+    cropModal.classList.remove('flex');
+    if (cropper) {
+        cropper.destroy();
+        cropper = null;
+    }
+    fileInput.value = ''; // Reset file input
+}
+
+function submitCrop() {
+    if (!cropper) return;
+    
+    // Get crop data
+    const data = cropper.getData();
+    cropDataInput.value = JSON.stringify({
+        x: data.x,
+        y: data.y,
+        width: data.width,
+        height: data.height
+    });
+    
+    // Submit form visually showing process
+    document.body.style.cursor = 'wait';
+    uploadForm.submit();
 }
 </script>

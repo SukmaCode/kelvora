@@ -18,6 +18,7 @@ class User extends BaseModel
         'name',
         'email',
         'phone',
+        'profile_image',
         'password_hash',
         'pin_hash',
         'is_verified',
@@ -25,6 +26,7 @@ class User extends BaseModel
         'role',
         'active_subscription_id',
         'status',
+        'last_login_at',
     ];
 
     /**
@@ -155,5 +157,29 @@ class User extends BaseModel
              GROUP BY u.id
              ORDER BY net_revenue DESC"
         );
+    }
+
+    /**
+     * Update user's profile image.
+     */
+    public function updateProfileImage(int $userId, string $filename): void
+    {
+        $this->update($userId, ['profile_image' => $filename]);
+    }
+
+    /**
+     * Delete/remove user's profile image (set to null).
+     */
+    public function deleteProfileImage(int $userId): void
+    {
+        $this->update($userId, ['profile_image' => null]);
+    }
+
+    /**
+     * Update the last login time for a user.
+     */
+    public function updateLastLogin(int $userId): void
+    {
+        $this->raw("UPDATE {$this->table} SET last_login_at = CURRENT_TIMESTAMP WHERE id = :id", ['id' => $userId]);
     }
 }

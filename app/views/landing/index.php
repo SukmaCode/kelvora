@@ -111,8 +111,12 @@
                     <a href="#harga" class="hover:text-primary transition-colors">Harga</a>
                     <?php endif; ?>
                     <!-- Profile Menu -->
-                    <button onclick="toggleProfileMenu()" class="w-10 h-10 rounded-full bg-primary text-white font-bold text-sm flex items-center justify-center shadow-soft hover:bg-secondary transition-all focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-2 focus:ring-offset-[#E0F2F4]" aria-label="Menu profil">
-                        <?= e($initials) ?>
+                    <button onclick="toggleProfileMenu()" class="w-10 h-10 rounded-full bg-primary text-white font-bold text-sm flex items-center justify-center shadow-soft hover:bg-secondary transition-all focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-2 focus:ring-offset-[#E0F2F4] overflow-hidden bg-cover bg-center" aria-label="Menu profil">
+                        <?php if (!empty($_SESSION['profile_image'])): ?>
+                            <img src="<?= url('public/uploads/profile/' . $_SESSION['profile_image']) ?>" alt="Profile" class="w-full h-full object-cover">
+                        <?php else: ?>
+                            <?= e($initials) ?>
+                        <?php endif; ?>
                     </button>
 
                 <?php else: ?>
@@ -133,8 +137,12 @@
                     <div class="relative" id="profileDropdown">
                         <div class="flex justify-center items-center gap-4">
                             <!-- Profile User Desktop -->
-                            <button onclick="toggleProfileMenu()" class="hidden md:flex w-10 h-10 rounded-full bg-primary text-white font-bold text-sm flex items-center justify-center shadow-soft hover:bg-secondary transition-all focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-2 focus:ring-offset-[#E0F2F4]" aria-label="Menu profil">
-                                <?= e($initials) ?>
+                            <button onclick="toggleProfileMenu()" class="hidden md:flex w-10 h-10 rounded-full bg-primary text-white font-bold text-sm flex items-center justify-center shadow-soft hover:bg-secondary transition-all focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-2 focus:ring-offset-[#E0F2F4] overflow-hidden bg-cover bg-center" aria-label="Menu profil">
+                                <?php if (!empty($_SESSION['profile_image'])): ?>
+                                    <img src="<?= url('public/uploads/profile/' . $_SESSION['profile_image']) ?>" alt="Profile" class="w-full h-full object-cover">
+                                <?php else: ?>
+                                    <?= e($initials) ?>
+                                <?php endif; ?>
                             </button>
                             <!-- Hamburger Bar -->
                             <button class="flex flex-col gap-1 p-2 md:hidden" onclick="toggleNavbarMobile()">
@@ -147,7 +155,13 @@
                         <div id="profileMenu" class="hidden absolute right-0 mt-3 w-64 bg-surface rounded-xl shadow-floating border border-txtmain/5 overflow-hidden z-50" style="animation: fadeDown .2s ease">
                             <div class="px-5 py-4 border-b border-txtmain/5">
                                 <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 rounded-full bg-primary text-white font-bold text-sm flex items-center justify-center flex-shrink-0"><?= e($initials) ?></div>
+                                    <div class="w-10 h-10 rounded-full bg-primary text-white font-bold text-sm flex items-center justify-center flex-shrink-0 overflow-hidden bg-cover bg-center">
+                                        <?php if (!empty($_SESSION['profile_image'])): ?>
+                                            <img src="<?= url('public/uploads/profile/' . $_SESSION['profile_image']) ?>" alt="Profile" class="w-full h-full object-cover">
+                                        <?php else: ?>
+                                            <?= e($initials) ?>
+                                        <?php endif; ?>
+                                    </div>
                                     <div class="min-w-0">
                                         
                                         <p class="font-bold text-sm text-txtmain truncate"><?= e($displayName) ?></p>

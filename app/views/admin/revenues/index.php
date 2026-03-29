@@ -29,14 +29,15 @@
                         </td>
                     </tr>
                 <?php else: ?>
+                    <?php $num = 1; ?>
                     <?php foreach ($revenues as $revenue): ?>
                         <tr class="hover:bg-gray-50/80 transition-colors">
-                            <td class="p-3 sm:p-4 text-center font-medium text-black">#<?= e($revenue->id) ?></td>
+                            <td class="p-3 sm:p-4 text-center font-medium text-black"><?= $num++ ?></td>
                             <td class="p-3 sm:p-4 font-medium text-[#2d3bd9]">
                                 <?= e($revenue->business_name) ?>
                             </td>
                             <td class="p-3 sm:p-4">
-                                <div class="font-medium text-black"><?= e($revenue->owner_name) ?></div>
+                                <div class="font-medium text-black"><?= e($revenue->name) ?></div>
                                 <div class="text-xs text-gray-500 mt-0.5"><?= e($revenue->email) ?></div>
                             </td>
                             <td class="p-3 sm:p-4 text-center font-medium text-black">
