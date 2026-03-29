@@ -19,6 +19,8 @@ class Order extends BaseModel
         'customer_id',
         'channel_id',
         'total_price',
+        'admin_fee',
+        'owner_earning',
         'payment_status',
         'order_status',
     ];
@@ -61,6 +63,7 @@ class Order extends BaseModel
             "SELECT 
                 COUNT(*) as total_orders,
                 COALESCE(SUM(total_price), 0) as total_revenue,
+                COALESCE(SUM(owner_earning), 0) as owner_earning,
                 COALESCE(SUM(CASE WHEN order_status = 'new' THEN 1 ELSE 0 END), 0) as pending_orders
              FROM {$this->table}
              WHERE user_id = :user_id",
@@ -69,42 +72,53 @@ class Order extends BaseModel
     }
 
     /**
-     * Get system-wide total revenue.
+     * Get system-wide total revenue (Gross + Platform Net).
      */
-    public function getTotalRevenue(): float
+    public function getTotalRevenue(): object
     {
-        $result = $this->rawOne("SELECT COALESCE(SUM(total_price), 0) as total_revenue FROM {$this->table}");
-        return (float) ($result->total_revenue ?? 0);
+        $grossResult = $this->rawOne("SELECT COALESCE(SUM(total_price), 0) as total FROM {$this->table}");
+        
+        // Only count approved payments for true platform revenue
+        $platformResult = $this->rawOne("SELECT COALESCE(SUM(admin_fee), 0) as total_fee FROM order_payments WHERE payment_status = 'approved'");
+
+        return (object)[
+            'gross_revenue' => (float) ($grossResult->total ?? 0),
+            'platform_fee'  => (float) ($platformResult->total_fee ?? 0)
+        ];
     }
 
     /**
      * Get today's total sales for a user.
      */
-    public function getTodaySales(int $userId): float
+    public function getTodaySales(int $userId): object
     {
         $result = $this->rawOne(
-            "SELECT COALESCE(SUM(total_price), 0) as total 
+            "SELECT 
+                COALESCE(SUM(total_price), 0) as total,
+                COALESCE(SUM(owner_earning), 0) as net_total
              FROM {$this->table} 
              WHERE user_id = :user_id 
                AND DATE(created_at) = CURDATE()",
             ['user_id' => $userId]
         );
-        return (float) ($result->total ?? 0);
+        return $result;
     }
 
     /**
      * Get current month's revenue for a user.
      */
-    public function getMonthlyRevenue(int $userId): float
+    public function getMonthlyRevenue(int $userId): object
     {
         $result = $this->rawOne(
-            "SELECT COALESCE(SUM(total_price), 0) as total 
+            "SELECT 
+                COALESCE(SUM(total_price), 0) as total,
+                COALESCE(SUM(owner_earning), 0) as net_total
              FROM {$this->table} 
              WHERE user_id = :user_id 
                AND MONTH(created_at) = MONTH(CURDATE()) 
                AND YEAR(created_at) = YEAR(CURDATE())",
             ['user_id' => $userId]
         );
-        return (float) ($result->total ?? 0);
+        return $result;
     }
 }

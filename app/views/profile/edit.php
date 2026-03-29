@@ -1,6 +1,6 @@
 <?php
     // Generate initials
-    $displayName = $user->owner_name ?? $user->business_name ?? 'U';
+    $displayName = $user->name ?? $user->business_name ?? 'U';
     $nameParts = explode(' ', trim($displayName));
     $initials = strtoupper(substr($nameParts[0], 0, 1));
     if (count($nameParts) > 1) {

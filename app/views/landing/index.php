@@ -98,7 +98,7 @@
             <div id="navbarMobile" class="hidden md:hidden absolute z-1 w-full right-0 top-0 p-8 bg-[#E0F2F4] backdrop-blur-lg flex flex-col gap-6 text-[14px] font-semibold uppercase text-txtmain/70" style="animation: fadeDownMobile .2s ease">
                 <?php if (!empty($_SESSION['user_id'])): ?>
                     <?php
-                        $displayName = $_SESSION['owner_name'] ?? $_SESSION['business_name'] ?? 'U';
+                        $displayName = $_SESSION['name'] ?? $_SESSION['business_name'] ?? 'U';
                         $nameParts = explode(' ', trim($displayName));
                         $initials = strtoupper(substr($nameParts[0], 0, 1));
                         if (count($nameParts) > 1) {
@@ -123,7 +123,7 @@
             <div class="flex items-center gap-4">
                 <?php if (!empty($_SESSION['user_id'])): ?>
                     <?php
-                        $displayName = $_SESSION['owner_name'] ?? $_SESSION['business_name'] ?? 'U';
+                        $displayName = $_SESSION['name'] ?? $_SESSION['business_name'] ?? 'U';
                         $nameParts = explode(' ', trim($displayName));
                         $initials = strtoupper(substr($nameParts[0], 0, 1));
                         if (count($nameParts) > 1) {

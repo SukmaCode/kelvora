@@ -75,6 +75,16 @@ $router->get('orders/{id}',        'OrderController@show');
 $router->post('orders/{id}/delete', 'OrderController@delete');
 
 // =========================================================================
+// Admin Payment Approvals & Revenues
+// =========================================================================
+$router->get('admin/payments', 'PaymentApprovalController@index');
+$router->post('admin/payments/{id}/approve', 'PaymentApprovalController@approve');
+$router->post('admin/payments/{id}/reject', 'PaymentApprovalController@reject');
+
+$router->get('admin/revenues', 'RevenueController@index');
+$router->get('admin/revenues/{id}', 'RevenueController@show');
+
+// =========================================================================
 // Income Statements (Dashboard + Export)
 // =========================================================================
 $router->get('income-statements',              'IncomeStatementController@index');

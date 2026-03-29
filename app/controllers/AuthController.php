@@ -74,15 +74,16 @@ class AuthController extends BaseController
          $this->validateCsrfAjax();
 
         $businessName = trim($this->input('business_name'));
-        $ownerName = trim($this->input('owner_name'));
-        $email = trim(strtolower($this->input('email')));
-        $password = $this->input('password');
-        $role = trim($this->input('role', 'owner'));
+        $name         = trim($this->input('name'));
+        $email        = trim(strtolower($this->input('email')));
+        $phone        = trim($this->input('phone'));
+        $password     = $this->input('password');
+        $role         = trim($this->input('role', 'owner'));
 
         if ($role === 'owner' && empty($businessName)) {
             $this->jsonResponse(['success' => false, 'message' => 'Nama Bisnis wajib diisi.']);
         }
-        if (empty($ownerName) || empty($email) || empty($password)) {
+        if (empty($name) || empty($email) || empty($phone) || empty($password)) {
             $this->jsonResponse(['success' => false, 'message' => 'Lengkapi data yang dibutuhkan.']);
         }
 
@@ -94,7 +95,11 @@ class AuthController extends BaseController
             $this->jsonResponse(['success' => false, 'message' => 'Password minimal 8 karakter.']);
         }
 
-        // Check unique email
+        // Check unique email and phone
+        if ($this->userModel->phoneExists($phone)) {
+            $this->jsonResponse(['success' => false, 'message' => 'Nomor HP sudah terdaftar.']);
+        }
+
         $existingUser = $this->userModel->findByEmail($email);
         if ($existingUser) {
             if ($existingUser->email_verified_at !== null) {
@@ -103,7 +108,8 @@ class AuthController extends BaseController
                 // Exists but unverified, update name and password hash
                 $this->userModel->update($existingUser->id, [
                     'business_name' => $businessName,
-                    'owner_name' => $ownerName,
+                    'name' => $name,
+                    'phone' => $phone,
                     'password_hash' => password_hash($password, PASSWORD_BCRYPT)
                 ]);
             }
@@ -111,8 +117,9 @@ class AuthController extends BaseController
             // Create user
             $this->userModel->create([
                 'business_name' => $businessName,
-                'owner_name' => $ownerName,
+                'name' => $name,
                 'email' => $email,
+                'phone' => $phone,
                 'password_hash' => password_hash($password, PASSWORD_BCRYPT),
                 'role' => $role,
                 'status' => 'active',
@@ -296,9 +303,10 @@ class AuthController extends BaseController
         session_regenerate_id(true);
 
         $_SESSION['user_id'] = $user->id;
-        $_SESSION['name'] = $user->owner_name; 
+        $_SESSION['name'] = $user->name; 
         $_SESSION['business_name'] = $user->business_name;
         $_SESSION['email'] = $user->email;
+        $_SESSION['phone'] = $user->phone;
         $_SESSION['user_role'] = $user->role;
     }
 

@@ -15,7 +15,7 @@ class User extends BaseModel
 
     protected array $fillable = [
         'business_name',
-        'owner_name',
+        'name',
         'email',
         'phone',
         'password_hash',
@@ -133,5 +133,27 @@ class User extends BaseModel
     public function markEmailAsVerified(int $userId): void
     {
         $this->update($userId, ['email_verified_at' => date('Y-m-d H:i:s')]);
+    }
+
+    /**
+     * Get list of owners (UMKMs) with their gross and net revenue.
+     */
+    public function getUmkmRevenues(): array
+    {
+        return $this->raw(
+            "SELECT 
+                u.id, 
+                u.business_name, 
+                u.name, 
+                u.email,
+                COUNT(o.id) as total_orders,
+                COALESCE(SUM(o.total_price), 0) as gross_revenue,
+                COALESCE(SUM(o.owner_earning), 0) as net_revenue
+             FROM {$this->table} u
+             LEFT JOIN orders o ON u.id = o.user_id AND o.payment_status IN ('paid', 'approved', 'processing')
+             WHERE u.role = 'owner'
+             GROUP BY u.id
+             ORDER BY net_revenue DESC"
+        );
     }
 }

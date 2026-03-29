@@ -28,12 +28,15 @@ class HomeController extends BaseController
             $productModel = new Product();
             $orderModel = new Order();
             
+            $revenueData = $orderModel->getTotalRevenue();
+
             $this->view('admin.index', [
                 'title' => 'Admin Dashboard',
                 'totalUsers' => $userModel->count(),
                 'totalProducts' => $productModel->count(),
                 'totalOrders' => $orderModel->count(),
-                'totalRevenue' => $orderModel->getTotalRevenue()
+                'totalRevenue' => $revenueData->gross_revenue,
+                'platformFee' => $revenueData->platform_fee
             ]);
         } else {
             $userId = $_SESSION['user_id'];
@@ -42,12 +45,18 @@ class HomeController extends BaseController
             
             $stats = $orderModel->getStatsByUser($userId);
 
+            $todaySales = $orderModel->getTodaySales($userId);
+            $monthlyRevenue = $orderModel->getMonthlyRevenue($userId);
+
             $this->view('owner.index', [
                 'title' => 'Dashboard',
                 'totalProducts' => $productModel->countByUser($userId),
                 'totalOrders' => $stats->total_orders ?? 0,
-                'todaySales' => $orderModel->getTodaySales($userId),
-                'monthlyRevenue' => $orderModel->getMonthlyRevenue($userId)
+                'todaySales' => $todaySales->total ?? 0,
+                'todayNet' => $todaySales->net_total ?? 0,
+                'monthlyRevenue' => $monthlyRevenue->total ?? 0,
+                'monthlyNet' => $monthlyRevenue->net_total ?? 0,
+                'totalNet' => $stats->owner_earning ?? 0
             ]);
         }
     }

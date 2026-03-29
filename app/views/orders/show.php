@@ -26,9 +26,15 @@
                 <span class="text-[0.95rem] text-slate-200"><?= e($order->customer_address ?? '-') ?></span>
             </div>
             <div class="flex flex-col gap-1">
-                <span class="text-xs font-medium text-slate-500 uppercase tracking-wide">Total Price</span>
-                <span class="text-base sm:text-lg font-bold text-indigo-400">
+                <span class="text-xs font-medium text-slate-500 uppercase tracking-wide">Gross Total (Customer Pays)</span>
+                <span class="text-base sm:text-lg font-bold text-slate-200">
                     <?= format_rupiah($order->total_price) ?>
+                </span>
+            </div>
+            <div class="flex flex-col gap-1">
+                <span class="text-xs font-medium text-slate-500 uppercase tracking-wide">Net Revenue (Owner Gets)</span>
+                <span class="text-base sm:text-lg font-bold text-[#10b981]">
+                    <?= format_rupiah($order->owner_earning) ?>
                 </span>
             </div>
             <div class="flex flex-col gap-1">
@@ -81,8 +87,20 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="3" class="px-3 sm:px-4 py-3.5 text-right font-semibold border-t-2 border-border">Total:</td>
-                    <td class="px-3 sm:px-4 py-3.5 font-bold text-base sm:text-lg text-indigo-400 border-t-2 border-border whitespace-nowrap">
+                    <td colspan="3" class="px-3 sm:px-4 py-3.5 text-right font-semibold border-t-2 border-border">Total Products:</td>
+                    <td class="px-3 sm:px-4 py-3.5 font-bold text-base text-slate-200 border-t-2 border-border whitespace-nowrap">
+                        <?= format_rupiah($order->owner_earning) ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3" class="px-3 sm:px-4 py-2 text-right font-medium text-slate-400">Platform Admin Fee:</td>
+                    <td class="px-3 sm:px-4 py-2 font-medium text-green-400 whitespace-nowrap">
+                        + <?= format_rupiah($order->admin_fee) ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3" class="px-3 sm:px-4 py-3.5 text-right font-bold text-slate-200 border-t border-border/50">Gross Charged to Customer:</td>
+                    <td class="px-3 sm:px-4 py-3.5 font-bold text-base sm:text-lg text-indigo-400 border-t border-border/50 whitespace-nowrap">
                         <?= format_rupiah($order->total_price) ?>
                     </td>
                 </tr>

@@ -8,6 +8,7 @@ use App\Models\Product;
 use App\Models\Customer;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\OrderPayment;
 
 /**
  * Landing Controller
@@ -56,9 +57,10 @@ class LandingController extends BaseController
         }
 
         $productId = (int) $this->input('product_id', 0);
+        $quantity = (int) $this->input('quantity', 1);
         
-        if ($productId <= 0) {
-            $this->jsonResponse(['success' => false, 'message' => 'Produk tidak valid.']);
+        if ($productId <= 0 || $quantity <= 0) {
+            $this->jsonResponse(['success' => false, 'message' => 'Produk atau kuantitas tidak valid.']);
         }
 
         $productModel = new Product();
@@ -66,6 +68,10 @@ class LandingController extends BaseController
 
         if (!$product || $product->status !== 'active') {
             $this->jsonResponse(['success' => false, 'message' => 'Produk tidak ditemukan atau tidak tersedia.']);
+        }
+        
+        if ($product->stock < $quantity) {
+            $this->jsonResponse(['success' => false, 'message' => 'Stok produk tidak mencukupi. Sisa stok: ' . $product->stock]);
         }
 
         $db = Database::getInstance();
@@ -76,14 +82,15 @@ class LandingController extends BaseController
             $customerModel = new Customer();
             
             // Check if customer alias exists for this owner
-            $cust = $customerModel->findByOwnerAndPhone($ownerId, $_SESSION['email']);
+            $cust = $customerModel->findByOwnerAndPhone($ownerId, $_SESSION['phone'] ?? '');
 
             if (!$cust) {
-                // Create customer record using email as phone according to user rules
+                // Create customer record using proper email and phone mapping
                 $customerId = $customerModel->create([
                     'user_id' => $ownerId,
                     'name' => $_SESSION['name'],
-                    'phone' => $_SESSION['email'],
+                    'email' => $_SESSION['email'],
+                    'phone' => $_SESSION['phone'] ?? '',
                     'instagram_username' => '',
                     'address' => '-'
                 ]);
@@ -91,11 +98,22 @@ class LandingController extends BaseController
                 $customerId = $cust->id;
             }
 
+            $adminFee = 1000.00;
+            $productTotal = $product->price * $quantity;
+            $finalPrice = $productTotal + $adminFee;
+
+            // Deduct stock
+            if (!$productModel->updateStock($product->id, $quantity)) {
+                throw new \Exception('Gagal mengubah stok, silakan coba lagi.');
+            }
+
             $orderModel = new Order();
             $orderId = $orderModel->create([
                 'user_id' => $ownerId,
                 'customer_id' => $customerId,
-                'total_price' => $product->price,
+                'total_price' => $finalPrice,
+                'admin_fee' => $adminFee,
+                'owner_earning' => $productTotal,
                 'payment_status' => 'pending',
                 'order_status' => 'new'
             ]);
@@ -104,8 +122,17 @@ class LandingController extends BaseController
             $orderItemModel->create([
                 'order_id' => $orderId,
                 'product_id' => $product->id,
-                'quantity' => 1,
+                'quantity' => $quantity,
                 'price' => $product->price
+            ]);
+
+            $orderPaymentModel = new OrderPayment();
+            $orderPaymentModel->create([
+                'order_id' => $orderId,
+                'gross_amount' => $finalPrice,
+                'admin_fee' => $adminFee,
+                'net_amount' => $productTotal,
+                'payment_status' => 'pending'
             ]);
 
             $db->commit();

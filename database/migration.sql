@@ -121,7 +121,8 @@ CREATE TABLE IF NOT EXISTS customers (
     id INT PRIMARY KEY AUTO_INCREMENT,
     user_id INT NOT NULL,
     name VARCHAR(150),
-    phone VARCHAR(30),
+    email VARCHAR(255) UNIQUE,
+    phone VARCHAR(30) UNIQUE,
     instagram_username VARCHAR(150),
     address TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -137,6 +138,8 @@ CREATE TABLE IF NOT EXISTS orders (
     customer_id INT NOT NULL,
     channel_id INT,
     total_price DECIMAL(12,2) NOT NULL,
+    admin_fee DECIMAL(12,2) DEFAULT 1000.00,
+    owner_earning DECIMAL(12,2) NOT NULL,
     payment_status VARCHAR(30) DEFAULT 'pending',
     order_status VARCHAR(30) DEFAULT 'new',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -156,6 +159,21 @@ CREATE TABLE IF NOT EXISTS order_items (
     price DECIMAL(12,2) NOT NULL,
     FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
     FOREIGN KEY (product_id) REFERENCES products(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- =========================
+-- 10.5. ORDER PAYMENTS
+-- =========================
+CREATE TABLE IF NOT EXISTS order_payments (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    order_id INT NOT NULL,
+    gross_amount DECIMAL(12,2) NOT NULL,
+    admin_fee DECIMAL(12,2) DEFAULT 1000.00,
+    net_amount DECIMAL(12,2) NOT NULL,
+    payment_status VARCHAR(30) DEFAULT 'pending',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- =========================
@@ -277,7 +295,7 @@ INSERT INTO users (business_name, owner_name, email, phone, password_hash, role,
 
 -- Sample password: "password" (bcrypt hashed)
 
-INSERT INTO customers (user_id, name, phone, address) VALUES
+INSERT INTO customers (user_id, name, email, phone, address) VALUES
 (1, 'Customer A', '08111111111', 'Jakarta'),
 (1, 'Customer B', '08122222222', 'Bandung'),
 (2, 'Customer C', '08133333333', 'Surabaya');

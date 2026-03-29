@@ -1,22 +1,22 @@
 <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-6">
-    <h2 class="text-lg font-semibold">All Users</h2>
-    <a href="<?= url('/users/create') ?>" class="inline-flex items-center justify-center gap-1.5 px-5 py-2.5 text-sm font-medium rounded-md cursor-pointer transition-all duration-200 bg-accent text-white border border-accent hover:bg-accent-hover hover:-translate-y-px w-full sm:w-auto">+ Add User</a>
+    <h2 class="text-lg font-semibold text-black">All Users</h2>
+    <a href="<?= url('/users/create') ?>" class="inline-flex items-center justify-center gap-1.5 px-5 py-2.5 text-sm font-medium rounded-md cursor-pointer transition-all duration-200 bg-[#2d3bd9] text-white border border-accent hover:bg-accent-hover hover:-translate-y-px w-full sm:w-auto">+ Add User</a>
 </div>
 
-<div class="border border-border rounded-[10px] shadow-[0_4px_24px_rgba(0,0,0,0.25)] overflow-hidden">
+<div class="border border-border rounded-[6px] shadow-[0_4px_24px_rgba(0,0,0,0.25)] overflow-hidden">
     <div class="overflow-x-auto">
         <table class="w-full border-collapse min-w-[700px]">
             <thead>
-                <tr>
-                    <th class="px-2 py-4 text-left text-xs font-semibold uppercase tracking-wide text-slate-400 bg-black/20 border-b border-border">ID</th>
-                    <th class="px-2 py-4 text-left text-xs font-semibold uppercase tracking-wide text-slate-400 bg-black/20 border-b border-border">Business Name</th>
-                    <th class="px-2 py-4 text-left text-xs font-semibold uppercase tracking-wide text-slate-400 bg-black/20 border-b border-border">Owner</th>
-                    <th class="px-2 py-4 text-left text-xs font-semibold uppercase tracking-wide text-slate-400 bg-black/20 border-b border-border">Email</th>
-                    <th class="px-2 py-4 text-left text-xs font-semibold uppercase tracking-wide text-slate-400 bg-black/20 border-b border-border">Phone</th>
-                    <th class="px-2 py-4 text-left text-xs font-semibold uppercase tracking-wide text-slate-400 bg-black/20 border-b border-border">Role</th>
-                    <th class="px-2 py-4 text-left text-xs font-semibold uppercase tracking-wide text-slate-400 bg-black/20 border-b border-border">Status</th>
-                    <th class="px-2 py-4 text-left text-xs font-semibold uppercase tracking-wide text-slate-400 bg-black/20 border-b border-border">Created</th>
-                    <th class="px-2 py-4 text-left text-xs font-semibold uppercase tracking-wide text-slate-400 bg-black/20 border-b border-border">Actions</th>
+                <tr class="bg-[#2d3bd9]">
+                    <th class="px-2 py-4 text-left text-xs font-semibold uppercase tracking-wide text-white bg-black/20 border-b border-border">ID</th>
+                    <th class="px-2 py-4 text-left text-xs font-semibold uppercase tracking-wide text-white bg-black/20 border-b border-border">Business Name</th>
+                    <th class="px-2 py-4 text-left text-xs font-semibold uppercase tracking-wide text-white bg-black/20 border-b border-border">Owner</th>
+                    <th class="px-2 py-4 text-left text-xs font-semibold uppercase tracking-wide text-white bg-black/20 border-b border-border">Email</th>
+                    <th class="px-2 py-4 text-left text-xs font-semibold uppercase tracking-wide text-white bg-black/20 border-b border-border">Phone</th>
+                    <th class="px-2 py-4 text-left text-xs font-semibold uppercase tracking-wide text-white bg-black/20 border-b border-border">Role</th>
+                    <th class="px-2 py-4 text-left text-xs font-semibold uppercase tracking-wide text-white bg-black/20 border-b border-border">Status</th>
+                    <th class="px-2 py-4 text-left text-xs font-semibold uppercase tracking-wide text-white bg-black/20 border-b border-border">Created</th>
+                    <th class="px-2 py-4 text-left text-xs font-semibold uppercase tracking-wide text-white bg-black/20 border-b border-border">Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -28,12 +28,12 @@
                     <?php $num = 1; ?>
                     <?php foreach ($users as $user): ?>
                         <tr class="hover:bg-indigo-500/[0.04] [&:last-child>td]:border-b-0">
-                            <td class="px-2 py-4 text-sm border-b border-border align-middle"><?= ($num++) ?></td>
-                            <td class="px-2 py-4 text-sm border-b border-border align-middle"><strong><?= e($user->business_name) ?></strong></td>
-                            <td class="px-2 py-4 text-sm border-b border-border align-middle"><?= e($user->owner_name) ?></td>
-                            <td class="px-2 py-4 text-sm border-b border-border align-middle"><?= e($user->email) ?></td>
-                            <td class="px-2 py-4 text-sm border-b border-border align-middle"><?= e($user->phone) ?></td>
-                            <td class="px-2 py-4 text-sm border-b border-border align-middle">
+                            <td class="px-2 py-4 text-sm text-black border-b border-border align-middle"><?= ($num++) ?></td>
+                            <td class="px-2 py-4 text-sm text-black border-b border-border align-middle"><strong><?= e($user->business_name ? $user->business_name : "-") ?></strong></td>
+                            <td class="px-2 py-4 text-sm text-black border-b border-border align-middle"><?= e($user->owner_name ?? "-") ?></td>
+                            <td class="px-2 py-4 text-sm text-black border-b border-border align-middle"><?= e($user->email ?? "-") ?></td>
+                            <td class="px-2 py-4 text-sm text-black border-b border-border align-middle"><?= e($user->phone ?? "-") ?></td>
+                            <td class="px-2 py-4 text-sm text-black border-b border-border align-middle">
                                 <span class="inline-block px-2.5 py-0.5 text-xs font-semibold rounded-full capitalize tracking-tight 
                                     <?= $user->role === 'admin' 
                                         ? 'bg-purple-500/15 text-purple-400' 

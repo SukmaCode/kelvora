@@ -10,7 +10,8 @@
                 <tr>
                     <th class="px-3 sm:px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-400 bg-black/20 border-b border-border">Order #</th>
                     <th class="px-3 sm:px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-400 bg-black/20 border-b border-border">Customer</th>
-                    <th class="px-3 sm:px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-400 bg-black/20 border-b border-border">Total</th>
+                    <th class="px-3 sm:px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-400 bg-black/20 border-b border-border">Gross</th>
+                    <th class="px-3 sm:px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-400 bg-black/20 border-b border-border">Net</th>
                     <th class="px-3 sm:px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-400 bg-black/20 border-b border-border">Payment</th>
                     <th class="px-3 sm:px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-400 bg-black/20 border-b border-border">Status</th>
                     <th class="px-3 sm:px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-400 bg-black/20 border-b border-border">Date</th>
@@ -28,6 +29,7 @@
                             <td class="px-3 sm:px-4 py-3 text-sm border-b border-border align-middle"><strong>#<?= e($order->id) ?></strong></td>
                             <td class="px-3 sm:px-4 py-3 text-sm border-b border-border align-middle"><?= e($order->customer_name ?? '-') ?></td>
                             <td class="px-3 sm:px-4 py-3 text-sm border-b border-border align-middle whitespace-nowrap"><?= format_rupiah($order->total_price) ?></td>
+                            <td class="px-3 sm:px-4 py-3 text-sm border-b border-border align-middle whitespace-nowrap text-[#10b981] font-medium"><?= format_rupiah($order->owner_earning) ?></td>
                             <td class="px-3 sm:px-4 py-3 text-sm border-b border-border align-middle">
                                 <?php
                                     $paymentBadge = match($order->payment_status) {

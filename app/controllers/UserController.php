@@ -59,7 +59,7 @@ class UserController extends BaseController
         $errors = [];
         $data = [
             'business_name' => trim($this->input('business_name', '')),
-            'owner_name'    => trim($this->input('owner_name', '')),
+            'name'          => trim($this->input('name', '')),
             'email'         => trim($this->input('email', '')),
             'phone'         => trim($this->input('phone', '')),
             'role'          => $this->input('role', 'owner'),
@@ -68,7 +68,7 @@ class UserController extends BaseController
         $password = $this->input('password', '');
 
         if (empty($data['business_name'])) $errors[] = 'Business name is required.';
-        if (empty($data['owner_name']))    $errors[] = 'Owner name is required.';
+        if (empty($data['name']))          $errors[] = 'Name is required.';
         if (empty($data['email']))         $errors[] = 'Email is required.';
         if (empty($data['phone']))         $errors[] = 'Phone number is required.';
         if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) $errors[] = 'Invalid email format.';
@@ -149,7 +149,7 @@ class UserController extends BaseController
 
         $data = [
             'business_name' => trim($this->input('business_name', '')),
-            'owner_name'    => trim($this->input('owner_name', '')),
+            'name'          => trim($this->input('name', '')),
             'email'         => trim($this->input('email', '')),
             'phone'         => trim($this->input('phone', '')),
             'role'          => $this->input('role', 'owner'),
@@ -158,7 +158,7 @@ class UserController extends BaseController
 
         $errors = [];
         if (empty($data['business_name'])) $errors[] = 'Business name is required.';
-        if (empty($data['owner_name']))    $errors[] = 'Owner name is required.';
+        if (empty($data['name']))          $errors[] = 'Name is required.';
         if (empty($data['email']))         $errors[] = 'Email is required.';
 
         if ($this->userModel->emailExists($data['email'], $id)) {

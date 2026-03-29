@@ -14,6 +14,7 @@ class Customer extends BaseModel
     protected array $fillable = [
         'user_id',
         'name',
+        'email',
         'phone',
         'instagram_username',
         'address',

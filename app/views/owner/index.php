@@ -24,14 +24,20 @@
         <div class="text-2xl sm:text-3xl w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center bg-indigo-500/[0.12] rounded-md shrink-0">💸</div>
         <div class="flex flex-col min-w-0">
             <span class="text-xs text-slate-400 uppercase tracking-wide">Today's Sales</span>
-            <span class="text-lg font-bold"><?= format_rupiah($todaySales ?? 0) ?></span>
+            <div class="flex flex-col gap-0.5 mt-0.5">
+                <span class="text-lg font-bold text-white"><?= format_rupiah($todaySales ?? 0) ?> <span class="text-xs font-normal text-slate-400">Gross</span></span>
+                <span class="text-[13px] font-semibold text-[#10b981] leading-none"><?= format_rupiah($todayNet ?? 0) ?> <span class="text-xs font-normal text-[#10b981]/70">Net</span></span>
+            </div>
         </div>
     </div>
     <div class="bg-card border border-border rounded-[10px] p-4 sm:p-5 flex items-center gap-4 shadow-[0_4px_24px_rgba(0,0,0,0.25)] transition-all duration-200 hover:border-accent hover:-translate-y-0.5">
         <div class="text-2xl sm:text-3xl w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center bg-indigo-500/[0.12] rounded-md shrink-0">📈</div>
         <div class="flex flex-col min-w-0">
             <span class="text-xs text-slate-400 uppercase tracking-wide">Monthly Revenue</span>
-            <span class="text-lg font-bold"><?= format_rupiah($monthlyRevenue ?? 0) ?></span>
+            <div class="flex flex-col gap-0.5 mt-0.5">
+                <span class="text-lg font-bold text-white"><?= format_rupiah($monthlyRevenue ?? 0) ?> <span class="text-xs font-normal text-slate-400">Gross</span></span>
+                <span class="text-[13px] font-semibold text-[#10b981] leading-none"><?= format_rupiah($monthlyNet ?? 0) ?> <span class="text-xs font-normal text-[#10b981]/70">Net</span></span>
+            </div>
         </div>
     </div>
 </div>

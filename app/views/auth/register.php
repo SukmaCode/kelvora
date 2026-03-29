@@ -148,12 +148,20 @@
                     </div>
                 </div>
 
-                <!-- Row 2: Email -->
-                <div class="space-y-1.5">
-                    <label for="email" class="text-sm font-semibold">Alamat Email Aktif</label>
-                    <input type="email" id="email" name="email" required
-                           class="w-full h-[44px] px-4 bg-white border border-slate-200 rounded-xl text-brandText focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all placeholder-slate-400 font-medium"
-                           placeholder="budi@email.com">
+                <!-- Row 2: Email and Phone -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <div class="space-y-1.5">
+                        <label for="email" class="text-sm font-semibold">Alamat Email Aktif</label>
+                        <input type="email" id="email" name="email" required
+                               class="w-full h-[44px] px-4 bg-white border border-slate-200 rounded-xl text-brandText focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all placeholder-slate-400 font-medium"
+                               placeholder="budi@email.com">
+                    </div>
+                    <div class="space-y-1.5">
+                        <label for="phone" class="text-sm font-semibold">Nomor HP (Unik)</label>
+                        <input type="tel" id="phone" name="phone" required
+                               class="w-full h-[44px] px-4 bg-white border border-slate-200 rounded-xl text-brandText focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all placeholder-slate-400 font-medium"
+                               placeholder="08123456789">
+                    </div>
                 </div>
 
                 <!-- Row 3: Password -->
@@ -296,6 +304,7 @@
         formData.append('business_name', document.getElementById('business_name').value);
         formData.append('owner_name', document.getElementById('owner_name').value);
         formData.append('email', document.getElementById('email').value);
+        formData.append('phone', document.getElementById('phone').value);
         formData.append('password', document.getElementById('password').value);
 
         try {

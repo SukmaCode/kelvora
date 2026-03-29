@@ -62,7 +62,7 @@ class ProfileController extends BaseController
 
         // Collect input
         $businessName = trim($this->input('business_name'));
-        $ownerName    = trim($this->input('owner_name'));
+        $name    = trim($this->input('name'));
         $email        = trim($this->input('email'));
         $phone        = trim($this->input('phone'));
         $password     = $this->input('password');
@@ -71,7 +71,7 @@ class ProfileController extends BaseController
         // Store old input
         $_SESSION['old_input'] = [
             'business_name' => $businessName,
-            'owner_name'    => $ownerName,
+            'name'          => $name,
             'email'         => $email,
             'phone'         => $phone,
         ];
@@ -82,8 +82,8 @@ class ProfileController extends BaseController
         if (empty($businessName)) {
             $errors['business_name'] = 'Nama bisnis wajib diisi.';
         }
-        if (empty($ownerName)) {
-            $errors['owner_name'] = 'Nama owner wajib diisi.';
+        if (empty($name)) {
+            $errors['name'] = 'Nama owner wajib diisi.';
         }
         if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $errors['email'] = 'Email tidak valid.';
@@ -121,7 +121,7 @@ class ProfileController extends BaseController
         // Build update data
         $updateData = [
             'business_name' => $businessName,
-            'owner_name'    => $ownerName,
+            'name'          => $name,
             'email'         => $email,
             'phone'         => $phone,
         ];
@@ -134,7 +134,7 @@ class ProfileController extends BaseController
 
         // Sync session
         $_SESSION['business_name'] = $businessName;
-        $_SESSION['owner_name']    = $ownerName;
+        $_SESSION['name']          = $name;
 
         unset($_SESSION['old_input']);
         unset($_SESSION['errors']);

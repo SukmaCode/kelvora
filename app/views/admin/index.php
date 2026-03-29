@@ -36,8 +36,11 @@
     <div class="bg-transparent border border-gray-300 rounded-[10px] p-4 sm:p-5 flex items-center gap-4 shadow-[0_4px_24px_rgba(0,0,0,0.25)] transition-all duration-200 hover:border-accent hover:-translate-y-0.5">
         <div class="text-2xl sm:text-3xl w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center bg-indigo-500/[0.12] rounded-md shrink-0">💰</div>
         <div class="flex flex-col min-w-0">
-            <span class="text-xs text-black uppercase tracking-wide">Revenue</span>
-            <span class="text-lg sm:text-xl font-bold text-black"><?= format_rupiah($totalRevenue ?? 0) ?></span>
+            <span class="text-xs text-black uppercase tracking-wide">Transacted Value</span>
+            <div class="flex flex-col gap-0.5 mt-0.5">
+                <span class="text-lg font-bold text-black"><?= format_rupiah($totalRevenue ?? 0) ?> <span class="text-[11px] font-normal text-gray-500">Gross</span></span>
+                <span class="text-[13px] font-semibold text-green-600 leading-none">+ <?= format_rupiah($platformFee ?? 0) ?> <span class="text-[11px] font-normal text-green-600/70">Admin Fee</span></span>
+            </div>
         </div>
     </div>
 </div>

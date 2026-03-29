@@ -86,6 +86,18 @@
                 </span>
                 <span>Users</span>
             </a>
+            <a href="<?= url('/admin/revenues') ?>" class="flex items-center gap-3 py-3 px-4 rounded-[10px] transition-all duration-200 font-medium <?= str_starts_with($uriPath, 'admin/revenues') ? 'bg-[#2d3bd9] text-white shadow-md shadow-[#2d3bd9]/20' : 'text-[#545e68] hover:bg-slate-100 hover:text-black' ?>">
+                <span class="text-lg w-6 flex justify-center">
+                    <svg class="w-[22px] h-[22px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path><path d="M22 12A10 10 0 0 0 12 2v10z"></path></svg>
+                </span>
+                <span>UMKM Revenues</span>
+            </a>
+            <a href="<?= url('/admin/payments') ?>" class="flex items-center gap-3 py-3 px-4 rounded-[10px] transition-all duration-200 font-medium <?= str_starts_with($uriPath, 'admin/payments') ? 'bg-[#2d3bd9] text-white shadow-md shadow-[#2d3bd9]/20' : 'text-[#545e68] hover:bg-slate-100 hover:text-black' ?>">
+                <span class="text-lg w-6 flex justify-center">
+                    <svg class="w-[22px] h-[22px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                </span>
+                <span>Payment Approvals</span>
+            </a>
             <?php endif; ?>
 
             <?php if (($_SESSION['user_role'] ?? '') === 'owner'): ?>

@@ -82,8 +82,8 @@ class Product extends BaseModel
     public function updateStock(int $id, int $quantity): bool
     {
         $this->db->query(
-            "UPDATE {$this->table} SET stock = stock - :qty WHERE id = :id AND stock >= :qty",
-            ['qty' => $quantity, 'id' => $id]
+            "UPDATE {$this->table} SET stock = stock - :qty1 WHERE id = :id AND stock >= :qty2",
+            ['qty1' => $quantity, 'qty2' => $quantity, 'id' => $id]
         );
         return true;
     }
@@ -95,5 +95,5 @@ class Product extends BaseModel
     {
         $result = $this->rawOne("SELECT COUNT(*) as total FROM {$this->table} WHERE user_id = :user_id", ['user_id' => $userId]);
         return (int) ($result->total ?? 0);
-    }
+    }   
 }
