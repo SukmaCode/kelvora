@@ -11,9 +11,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@800&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet">
     
     <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="<?= url('public/build/assets/style.css') ?>">
     <script>
-        tailwind.config = {
+        window.tailwind = window.tailwind || {}; tailwind.config = {
             theme: {
                 extend: {
                     colors: {
@@ -137,7 +137,7 @@
                     <div class="relative" id="profileDropdown">
                         <div class="flex justify-center items-center gap-4">
                             <!-- Profile User Desktop -->
-                            <button onclick="toggleProfileMenu()" class="hidden md:flex w-10 h-10 rounded-full bg-primary text-white font-bold text-sm flex items-center justify-center shadow-soft hover:bg-secondary transition-all focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-2 focus:ring-offset-[#E0F2F4] overflow-hidden bg-cover bg-center" aria-label="Menu profil">
+                            <button onclick="toggleProfileMenu()" class="hidden md:flex w-10 h-10 rounded-full bg-primary text-white font-bold text-sm flex items-center justify-center cursor-pointer shadow-soft hover:bg-secondary transition-all focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-2 focus:ring-offset-[#E0F2F4] overflow-hidden bg-cover bg-center" aria-label="Menu profil">
                                 <?php if (!empty($_SESSION['profile_image'])): ?>
                                     <img src="<?= url('public/uploads/profile/' . $_SESSION['profile_image']) ?>" alt="Profile" class="w-full h-full object-cover">
                                 <?php else: ?>
@@ -151,11 +151,13 @@
                                 <span class="w-4 h-0.5 bg-black"></span>
                             </button>
                         </div>
+                        
                         <!-- Modal/Overlay Profile -->
                         <div id="profileMenu" class="hidden absolute right-0 mt-3 w-64 bg-surface rounded-xl shadow-floating border border-txtmain/5 overflow-hidden z-50" style="animation: fadeDown .2s ease">
                             <div class="px-5 py-4 border-b border-txtmain/5">
+                                
                                 <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 rounded-full bg-primary text-white font-bold text-sm flex items-center justify-center flex-shrink-0 overflow-hidden bg-cover bg-center">
+                                    <div class="relative group w-12 h-12 rounded-full border-2 border-primary/20 bg-primary text-white font-bold text-base flex items-center justify-center flex-shrink-0 overflow-hidden bg-cover bg-center shadow-sm">
                                         <?php if (!empty($_SESSION['profile_image'])): ?>
                                             <img src="<?= url('public/uploads/profile/' . $_SESSION['profile_image']) ?>" alt="Profile" class="w-full h-full object-cover">
                                         <?php else: ?>
@@ -163,13 +165,13 @@
                                         <?php endif; ?>
                                     </div>
                                     <div class="min-w-0">
-                                        
                                         <p class="font-bold text-sm text-txtmain truncate"><?= e($displayName) ?></p>
                                         <p class="text-xs text-txtmain/50 truncate"><?= e($_SESSION['business_name'] ?? '') ?></p>
                                     </div>
                                 </div>
                             </div>
                             <div class="py-2">
+                                
                                 <?php if (($_SESSION['user_role'] ?? '') !== 'customer'): ?>
                                 <a href="<?= url('home') ?>" class="flex items-center gap-3 px-5 py-2.5 text-sm font-semibold text-txtmain/70 hover:bg-brandBg hover:text-primary transition-colors">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
@@ -177,10 +179,17 @@
                                 </a>
                                 <?php endif; ?>
                                 
+                                <?php if (($_SESSION['user_role'] ?? '') !== 'customer'): ?>
                                 <a href="<?= url('profile') ?>" class="flex items-center gap-3 px-5 py-2.5 text-sm font-semibold text-txtmain/70 hover:bg-brandBg hover:text-primary transition-colors">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
                                     Edit Profil
                                 </a>
+                                <?php else: ?>
+                                <button onclick="toggleEditProfile()" class="flex items-center gap-3 px-5 py-2.5 text-sm font-semibold text-txtmain/70 hover:bg-brandBg hover:text-primary transition-colors">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                                    Edit Profil
+                                </button>
+                                <?php endif;?>  
                             </div>
                             <div class="border-t border-txtmain/5 py-2">
                                 <a href="<?= url('logout') ?>" class="flex items-center gap-3 px-5 py-2.5 text-sm font-semibold text-red-500 hover:bg-red-50 transition-colors">
@@ -194,6 +203,25 @@
                     <a href="<?= url('login') ?>" class="hidden md:block font-bold text-[15px] text-txtmain hover:text-primary transition-colors">Masuk</a>
                     <a href="<?= url('register') ?>" class="inline-flex items-center justify-center h-[44px] px-6 bg-primary text-white font-bold text-[15px] rounded-xl hover:bg-secondary transition-all shadow-soft hover:-translate-y-0.5">Daftar Sekarang</a>
                 <?php endif; ?>
+            </div>
+        </div>
+
+        <!-- Modal for Crop Image -->
+        <div id="cropModal" class="fixed inset-0 z-[110] hidden bg-black/80 items-center justify-center p-4">
+            <div class="bg-card rounded-xl border border-border w-full max-w-lg overflow-hidden shadow-2xl flex flex-col">
+                <div class="p-4 border-b border-border flex justify-between items-center bg-card">
+                    <h3 class="text-white font-semibold">Sesuaikan Foto</h3>
+                    <button type="button" onclick="closeCropModal()" class="text-slate-400 hover:text-white transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                </div>
+                <div class="p-4 bg-black flexItems-center justify-center relative min-h-[300px] max-h-[60vh] overflow-hidden">
+                    <img id="imageToCrop" src="" alt="To Crop" class="max-w-full block">
+                </div>
+                <div class="p-4 border-t border-border bg-card flex justify-end gap-3">
+                    <button type="button" onclick="closeCropModal()" class="px-4 py-2 border border-border text-black rounded hover:bg-slate-800 transition-colors text-sm font-medium">Batal</button>
+                    <button type="button" onclick="submitCrop()" class="px-4 py-2 bg-accent text-white rounded hover:bg-accent-hover transition-colors text-sm font-medium">Terapkan & Simpan</button>
+                </div>
             </div>
         </div>
     </nav>
@@ -695,7 +723,26 @@
         </div>
     </footer>
 
+    <?php if (($_SESSION['user_role'] ?? '') === 'customer'): ?>
+    <?php 
+        $userModel = new \App\Models\User();
+        $user = $userModel->findById($_SESSION['user_id']);
+    ?>
+    <div id="customerProfileModal" class="fixed inset-0 z-[100] hidden bg-black/60 backdrop-blur-sm items-center justify-center p-4 sm:p-6 overflow-y-auto">
+        <div class="relative w-full max-w-4xl opacity-0 scale-95 transition-all duration-300" id="customerProfileModalContent">
+            <!-- Close Button -->
+            <button onclick="toggleEditProfile()" class="absolute top-4 right-4 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            <div class="max-h-[90vh] overflow-y-auto hide-scrollbar">
+                <?php require BASE_PATH . '/app/views/profile/customer/edit.php'; ?>
+            </div>
+        </div>
+    </div>
+    <?php endif; ?>
+
 <script>
+    
     function toggleProfileMenu() {
         const menu = document.getElementById('profileMenu');
         menu.classList.toggle('hidden');
@@ -711,6 +758,40 @@
             menu.classList.add('hidden');
         }
     });
+
+    function toggleEditProfile() {
+        const modal = document.getElementById('customerProfileModal');
+        const content = document.getElementById('customerProfileModalContent');
+        
+        if (!modal) return;
+        
+        if (modal.classList.contains('hidden')) {
+            // Show modal
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            
+            // Animation
+            setTimeout(() => {
+                content.classList.remove('opacity-0', 'scale-95');
+                content.classList.add('opacity-100', 'scale-100');
+            }, 10);
+            
+            // Close profile menu if open
+            const menu = document.getElementById('profileMenu');
+            if (menu) menu.classList.add('hidden');
+            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        } else {
+            // Hide modal animations
+            content.classList.remove('opacity-100', 'scale-100');
+            content.classList.add('opacity-0', 'scale-95');
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+                document.body.style.overflow = '';
+            }, 300);
+        }
+    }
 </script>
 </body>
 </html>

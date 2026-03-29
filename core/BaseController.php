@@ -39,7 +39,11 @@ class BaseController
         $content = ob_get_clean();
 
         // Render inside layout
-        require BASE_PATH . '/app/views/layouts/sidebar.php';
+        if (file_exists(BASE_PATH . '/app/views/layouts/sidebar-and-main.php')) {
+            require BASE_PATH . '/app/views/layouts/sidebar-and-main.php';
+        } else {
+            require BASE_PATH . '/app/views/layouts/sidebar.php';
+        }
 
         // Clear flashed session data (errors & old input) after rendering the view
         unset($_SESSION['errors']);

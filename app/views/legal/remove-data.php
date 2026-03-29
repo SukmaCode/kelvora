@@ -7,9 +7,9 @@
     <title>Penghapusan Data Pengguna — Kelvora</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="<?= url('public/build/assets/style.css') ?>">
     <script>
-        tailwind.config = {
+        window.tailwind = window.tailwind || {}; tailwind.config = {
             theme: {
                 extend: {
                     fontFamily: { sans: ['Inter', 'sans-serif'] },

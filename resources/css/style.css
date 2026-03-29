@@ -1,0 +1,42 @@
+@import "tailwindcss";
+
+@source "../../app";
+
+@theme {
+  --font-sans: "Inter", "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "sans-serif";
+  --font-heading: "Outfit", "sans-serif";
+  --font-body: "Plus Jakarta Sans", "sans-serif";
+
+  --color-primary: #2D3BD9;
+  --color-secondary: #5C6AE6;
+  --color-bgnav: #E0F2F4;
+  --color-bg-color: #E0F2F4;
+  --color-surface: #FFFFFF;
+  --color-txtmain: #0B1220;
+  --color-accent: #4FD1C5;
+  --color-brand-bg: #E0F2F4;
+  --color-brand-text: #0B1220;
+
+  --color-dark: #0f172a;
+  --color-sidebar: #ffffff;
+  --color-card: #1e293b;
+  --color-input: #0f172a;
+  --color-border: #334155;
+
+  --shadow-soft: 0 4px 14px rgba(11, 18, 32, 0.08);
+  --shadow-floating: 0 12px 32px rgba(11, 18, 32, 0.12);
+
+  --radius-xl: 12px;
+
+  --width-sidebar: 260px;
+  --margin-sidebar: 260px;
+}
+
+@layer utilities {
+  .brand-gradient {
+    background: linear-gradient(135deg, #818cf8, #6366f1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
